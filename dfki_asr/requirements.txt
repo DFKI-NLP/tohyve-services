@@ -1,0 +1,16 @@
+fastapi>=0.68.0,<0.69.0
+pydantic>=1.8.0,<2.0.0
+uvicorn>=0.15.0,<0.16.0
+sentencepiece
+moviepy
+git+https://github.com/huggingface/transformers
+# torchvision 
+# torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+# torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+torch
+pytube
+# openai-whisper==20230306
+ffmpeg-python
+python-multipart
+# aiofiles
+
