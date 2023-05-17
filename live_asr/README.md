@@ -1,4 +1,4 @@
-# DFKI ASR
+# DFKI ASR (Need to update it!)
 It's a tool to extract audio from a video clip than transfrom that audio into text. Later, translate that transformed text into English and German. Afterwards add those translated English and German text as a caption of the inserted video clip. Finally, return the video with translated caption. In audio extraction it uses **moviepy** technology. For text transformation it uses OpenAI's **Wispher**. 
 
 ## Installing Using Docker:
