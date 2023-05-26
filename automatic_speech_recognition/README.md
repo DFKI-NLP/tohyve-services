@@ -1,5 +1,5 @@
-# DFKI ASR (Need to update it!)
-It's a tool to extract audio from a video clip than transfrom that audio into text. Later, translate that transformed text into English and German. Afterwards add those translated English and German text as a caption of the inserted video clip. Finally, return the video with translated caption. In audio extraction it uses **moviepy** technology. For text transformation it uses OpenAI's **Wispher**. 
+# Automatic Speech Recognition (ASR)
+It's a tool to extract streaming audio or take an audio file(mp3) than transfrom that audio into text. For text transformation it uses huggingface's [openai/whisper-medium](https://huggingface.co/openai/whisper-medium) model. This model is first implemented by [Radford et al., 2022](https://arxiv.org/abs/2212.04356).
 
 ## Installing Using Docker:
 * To Pull it: 
@@ -33,14 +33,14 @@ setx PATH "<path of unzipped ffmpeg>;%PATH%"
 python3 -m main
 ```
 ## To interact with the API:
-* Interactive mode: http://localhost:8000/docs/
-* Curl-call: http://localhost:8000/translator/?src_text=your_text&tr_ln=target_language_code
+* Interactive mode: http://localhost:8000/
+<!-- * Curl-call: http://localhost:8000/translator/?src_text=your_text&tr_ln=target_language_code -->
 
 ## Input Constraints: 
 * Each sentence length <= 120 
 * Each text length can be > 0 words
 * Each text can have multiple sentences!
-
+<!-- 
 ## Sample Input (Using FAST-API's Interface)
 https://user-images.githubusercontent.com/26096858/203446538-9ad777fb-df7b-49e0-8cb7-60d44916b00b.mp4
 
@@ -81,4 +81,4 @@ https://user-images.githubusercontent.com/26096858/213205892-af8f282a-41b7-43d1-
 
 
 https://user-images.githubusercontent.com/26096858/213207098-719a8b11-2dce-4433-8e42-d0ecbd611f14.mp4
-
+ -->
