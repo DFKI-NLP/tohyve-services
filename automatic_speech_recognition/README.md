@@ -41,8 +41,8 @@ python3 -m main
 * Each sentence length <= 120 
 * Each text length can be > 0 words
 * Each text can have multiple sentences!
-<!--  -->
-## Sample Input (Using FAST-API's Interface)
+ -->
+<!-- ## Sample Input (Using FAST-API's Interface)
 https://user-images.githubusercontent.com/26096858/203446538-9ad777fb-df7b-49e0-8cb7-60d44916b00b.mp4
 
 
