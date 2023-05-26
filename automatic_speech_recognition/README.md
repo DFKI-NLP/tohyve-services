@@ -14,14 +14,15 @@ docker run --rm -it -p 8000:8000/tcp dfkitohyve/machine-translation:1.0
 ### Pre-requsites:
 * python 3.8 or above
 * pip 22
-* create a python/conda environment and install requirements.txt using pip using 
-```
-pip install -r requirements.txt
-```
-* then go to:
+* Go to:
 ```
 cd automatic_speech_recognition
 ```
+* Create a python/conda environment and install requirements.txt using pip using 
+```
+pip install -r requirements.txt
+```
+
 * downlaod ffmpeg from https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z
 * than  unzip it and set new environment path using cmd
 ```
@@ -35,12 +36,12 @@ python3 -m main
 ## To interact with the API:
 * Interactive mode: http://localhost:8000/
 <!-- * Curl-call: http://localhost:8000/translator/?src_text=your_text&tr_ln=target_language_code -->
-
+<!-- 
 ## Input Constraints: 
 * Each sentence length <= 120 
 * Each text length can be > 0 words
 * Each text can have multiple sentences!
-<!-- 
+<!--  -->
 ## Sample Input (Using FAST-API's Interface)
 https://user-images.githubusercontent.com/26096858/203446538-9ad777fb-df7b-49e0-8cb7-60d44916b00b.mp4
 
