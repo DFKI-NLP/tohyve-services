@@ -50,7 +50,7 @@ class ASR:
             ),
             allow_flagging="never",
             # css="body {background-color: white}"
-            auto_submit=True,
+            # auto_submit=True,
         )
         # with demo:
         #     gr.TabbedInterface([mf_transcribe], ["Transcribe Audio"])
