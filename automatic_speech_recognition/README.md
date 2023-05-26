@@ -20,7 +20,7 @@ pip install -r requirements.txt
 ```
 * then go to:
 ```
-cd dfki_asr
+cd automatic_speech_recognition
 ```
 * downlaod ffmpeg from https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z
 * than  unzip it and set new environment path using cmd
