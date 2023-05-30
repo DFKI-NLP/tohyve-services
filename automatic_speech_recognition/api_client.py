@@ -24,9 +24,9 @@ def run_asr_api():
     client = Client("http://localhost:8000/")
 
     job = client.submit(
-        "de",	# str representing string value in 'Input_language' Textbox component
-        "",	# str representing filepath or URL to file in 'Microphone' Audio component
-        "C:/Users/ASUS/Downloads/trans_audio.mp3",	# str representing filepath or URL to file in 'File_upload' Audio component
+        "de",	# str representing string value in 'Input_language' Textbox component.
+        "",	# str representing filepath or URL to file in 'Microphone' Audio component.
+        "C:/Users/ASUS/Downloads/trans_audio.mp3",	# str representing filepath or URL to file in 'File_upload' Audio component.
         api_name="/predict", 
         result_callbacks=[print_result]
         )
