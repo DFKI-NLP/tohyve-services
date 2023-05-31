@@ -41,7 +41,7 @@ python3 -m main
 
 ## **Sample Input**
 * Lets say, we want to translate ***"Hallo! Wie geht es dir?"*** in English. So it's input should look like below:
-### **Curl Call**
+### **cURL Call**
 ```
 curl -X 'GET' \
   'http://localhost:8000/translator/?text=Hallo%21%20Wie%20geht%20es%20dir%3F&text_language=de&target_language=en' \
