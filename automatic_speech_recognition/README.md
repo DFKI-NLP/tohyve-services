@@ -35,7 +35,9 @@ python3 -m main
 ```
 ## To interact with the API:
 * Interactive mode: http://localhost:8000/
-<!-- * Curl-call: http://localhost:8000/translator/?src_text=your_text&tr_ln=target_language_code -->
+* Curl-call: http://localhost:8000/translator/?src_text=your_text&tr_ln=target_language_code
+* cURL-call:
+curl -X POST http://localhost:8000/run/predict/ -H 'Content-Type: application/json' -d '{"data": ["de","", "C:/Users/ASUS/Downloads/trans_audio.mp3"]}'
 <!-- 
 ## Input Constraints: 
 * Each sentence length <= 120 
