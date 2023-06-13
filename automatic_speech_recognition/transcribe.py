@@ -54,9 +54,8 @@ class ASR:
             width:100%;\
             background-image:url("https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png");\
             background-repeat: no-repeat;\
-            background-size: 100px 50px;\
-            background-attachment: fixed;\
-            background-position: 110px 10px\
+            background-size: auto;\
+            background-position: relative;\
             }'
         title = "Automatic Speech Recognition Demonstrator"
         description = (
@@ -66,7 +65,7 @@ class ASR:
                 'ml', 'cy', 'sk', 'te', 'fa', 'lv', 'bn', 'sr', 'az', 'sl', 'kn', 'et', 'mk', 'br', 'eu', 'is', 'hy', 'ne', 'mn', 'bs', 'kk', 'sq', 'sw',  'gl', 'mr', 'pa', 'si', 'km', 'sn', 'yo', 'so', 'af', 'oc', 'ka', 'be', 'tg', 'sd', 
                 'gu', 'am', 'yi', 'lo', 'uz', 'fo', 'ht', 'ps', 'tk', 'nn', 'mt', 'sa', 'lb', 'my', 'bo', 'tl', 'mg', 'as', 'tt', 'haw', 'ln', 'ha', 'ba', 'jw', 'su', 'my', 'ca', 'nl', 'ht', 'lb', 'ps', 'pa', 'ro', 'ro', 'si', 'es'"""
             )
-        demo = gr.Blocks()
+        demo = gr.Blocks(css=".gradio-container {background: url('https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 50px; background-size: 90px 45px;}")
         micro_transcribe = gr.Interface(
         # demo = gr.Interface(
             fn=self.transcribe_microphone,
@@ -76,7 +75,7 @@ class ASR:
                 "state",
             ],
             outputs=[ "textbox", "state"],
-            css=css_code,
+            # css=css_code,
             title=title,
             description=description,
             live=True,
@@ -101,5 +100,6 @@ class ASR:
         with demo:
             gr.TabbedInterface([micro_transcribe, file_transcribe], ["Transcribe Microphone", "Transcribe File"])
 
-        demo.launch(server_name="0.0.0.0", server_port=8000)#, share=True) # to change port number, we can change "server_port" 
+        demo.launch(server_name="0.0.0.0", server_port=8000)# to change port number, we can change "server_port" 
+        # demo.launch(server_name="0.0.0.0", server_port=8000, share=True)# to launch it to gradio public server
         return
