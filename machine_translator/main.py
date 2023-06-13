@@ -32,7 +32,7 @@ m2m_obj = M2m100TranslatorModels()
 # root directory for created files
 created_data_dir = "./created_data/"
 
-description = "It's a translator for DFKI. It uses several strategies to translate a text into a targeted language."
+description = "It's a machine translator tool. It translate a text into a targeted language."
 tags_metadata = [
     {
         "name": "/",
