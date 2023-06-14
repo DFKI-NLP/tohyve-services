@@ -8,7 +8,7 @@ ENV TRANSFORMERS_CACHE=/path/to/transformers
 
 # RUN pip install --upgrade pip
 # RUN apk add git
-User root
+USER root
 RUN apt update
 RUN apt-get install -y git
 RUN apt install -y python3-pip
