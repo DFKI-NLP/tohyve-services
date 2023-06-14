@@ -13,7 +13,7 @@ import uvicorn
 import warnings
 
 from model import MbartTranslatorModels, M2m100TranslatorModels
-from translator import translate_text#, translate_text_lifeline #, extractSentences, cleanText #, translate_text_audio
+from translator import translate_text
 from fastapi import FastAPI#, File, UploadFile
 from utils import identify_language_codes#, identify_tags,  extract_texts
 
@@ -36,7 +36,7 @@ description = "It's a machine translator tool. It translate a text into a target
 tags_metadata = [
     {
         "name": "/",
-        "description": "Hello, I am the root of the API."
+        "description": "Root path!"
     },
     # {
     #     "name": "file-translator",
@@ -50,7 +50,7 @@ tags_metadata = [
 
 # initialize FastAPI
 app = FastAPI(
-    title="DFKI NLU Machine Translator Tool",
+    title="Machine Translation Tool",
     description = description,
     openapi_tags = tags_metadata
 )
@@ -59,7 +59,7 @@ app = FastAPI(
 # the root directory
 @app.get("/", tags=["/"])
 def read_root():
-    return {"Machine Translator": "Hello! I am a DFKI Machine Translator Tool!"}
+    return {"Machine Translator": "Hello! I am a Machine Translation tool!"}
 
 
 # translator directory
