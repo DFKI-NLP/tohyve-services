@@ -23,7 +23,7 @@ def launch_asr():
     try:
         asr_obj = ASR(pipe, MODEL_NAME)
         asr_obj.do_asr()
-        return {"ASR": "Hello! I am a DFKI ASR!"}
+        return {"ASR": "Task Completed!"}
     except Exception as e:
         return traceback.print_exception(*sys.exc_info())
 
