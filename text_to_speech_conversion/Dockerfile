@@ -12,11 +12,19 @@ USER root
 RUN apt update
 RUN apt-get install -y git
 RUN apt install -y python3-pip
-RUN apt install -y ffmpeg
-# RUN apt-get install -y python3.9-tk
 
 ADD requirements.txt .
 RUN python3 -m pip install -r requirements.txt
+
+RUN apt-get update && apt-get install -y libsndfile1 ffmpeg
+RUN python3 -m pip install Cython
+RUN python3 -m pip install nemo_toolkit['all']
+
+# RUN apt install -y ffmpeg
+# RUN apt-get install -y python3.9-tk
+
+
+# RUN python3 -m pip install nemo_toolkit['all']
 # RUN python3 -m pip install setuptools-rust
 
 

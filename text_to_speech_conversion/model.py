@@ -1,17 +1,28 @@
-import torch
+# import torch
 
-from transformers import pipeline
+from nemo.collections.tts.models import FastPitchModel
+from nemo.collections.tts.models import HifiGanModel
+
 
 # initiate the whisper model
 def init_model():
-    MODEL_NAME = "openai/whisper-medium" # we can change this name to change whisper model type
-    device = 0 if torch.cuda.is_available() else "cpu"
-    pipe = pipeline(
-        task="automatic-speech-recognition",
-        model=MODEL_NAME,
-        chunk_length_s=30,
-        device=device,
-    )
+    fast_pitch_dic = {}
+    model_dic = {}
     
-    return pipe, MODEL_NAME
+    # Load FastPitch
+    fast_pitch_dic["spec_generator_en"] = FastPitchModel.from_pretrained("tts_en_fastpitch_multispeaker")
+    # fast_pitch_dic["spec_generator_de"] = FastPitchModel.from_pretrained("tts_de_fastpitch_multispeaker_5")
+    spec_generator = FastPitchModel.from_pretrained("tts_de_fastpitch_singleSpeaker_thorstenNeutral_2210")
+    # spec_generator = FastPitchModel.from_pretrained("tts_de_fastpitch_singleSpeaker_thorstenNeutral_2102")
+
+    # Load vocoder
+    model_dic["model_en"] = HifiGanModel.from_pretrained(model_name="tts_en_hifitts_hifigan_ft_fastpitch")
+    # model_dic["model_de"] = HifiGanModel.From_pretrained(model_name="tts_de_hui_hifigan_ft_fastpitch_multispeaker_5")
+    model = HifiGanModel.from_pretrained(model_name="tts_de_hifigan_singleSpeaker_thorstenNeutral_2210")
+    # model = HifiGanModel.from_pretrained(model_name="tts_de_hifigan_singleSpeaker_thorstenNeutral_2102")
+
+    # device = 0 if torch.cuda.is_available() else "cpu"
+    device = None
+    
+    return fast_pitch_dic, model_dic, device
 
