@@ -16,6 +16,6 @@ class TTS:
         parsed = self.spec_generator.parse(text)
         spectrogram = self.spec_generator.generate_spectrogram(tokens=parsed)
         audio = self.model.convert_spectrogram_to_audio(spec=spectrogram)
-
-        sf.write(self.data_dir+"/speech.wav", np.ravel(audio.detach().numpy()), 22050)
+        with open(self.data_dir+"/speech.wav", "wb") as audio_file:
+            sf.write(audio_file, np.ravel(audio.detach().numpy()), 22050)
         return

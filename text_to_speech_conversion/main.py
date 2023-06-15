@@ -26,7 +26,7 @@ fast_pitch_dic, model_dic, device = init_model()
 
 
 # root directory for created files
-created_data_dir = "./text_to_speech_conversion/created_audio"
+created_data_dir = "./created_audio"
 
 description = "It's a text to speech conversion tool. It convert a text into a speech. It only works for DEUTSCH and ENGLISH languages."
 tags_metadata = [
