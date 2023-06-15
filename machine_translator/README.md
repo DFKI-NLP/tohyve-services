@@ -7,11 +7,11 @@ Afrikaans (af), Amharic (am), Arabic (ar), Asturian (ast), Azerbaijani (az), Bas
 ## Installing Using Docker:
 * To Pull it: 
 ```
-docker pull akhyarahmed/dfkinludocker:mt_1.2
+docker pull dfkitohyve/machine-translation:1.0
 ```
 * To Run it: 
 ```
-docker run --rm -it -p 8000:8000/tcp akhyarahmed/dfkinludocker:mt_1.2
+docker run --rm -it -p 8000:8000/tcp dfkitohyve/machine-translation:1.0
 ```
 ## Installing in Local Environment:
 ### Pre-requsites:
@@ -31,8 +31,7 @@ cd dfki_nlu_docker/machine_translator
 python3 -m main
 ```
 ## To interact with the API:
-* Interactive mode: http://localhost:8000/docs/
-* Http-call: http://localhost:8000/translator/?text=your_text&text_language=text_language_code&target_language=target_language_code
+* <u>Interactive mode</u>: http://localhost:8000/docs/
 
 ## Input Constraints: 
 * Each sentence length <= 120 
