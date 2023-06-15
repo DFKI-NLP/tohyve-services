@@ -4,11 +4,11 @@ It's a tool to extract streaming audio or take an audio file(mp3) than transfrom
 ## Installing Using Docker:
 * To Pull it: 
 ```
-docker pull dfkitohyve/machine-translation:1.0
+docker pull dfkitohyve/asr:1.0
 ```
 * To Run it: 
 ```
-docker run --rm -it -p 8000:8000/tcp dfkitohyve/machine-translation:1.0
+docker run --rm -it -p 8000:8000/tcp dfkitohyve/asr:1.0
 ```
 ## Installing in Local Environment:
 ### Pre-requsites:
