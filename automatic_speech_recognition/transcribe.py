@@ -66,7 +66,7 @@ class ASR:
                 'gu', 'am', 'yi', 'lo', 'uz', 'fo', 'ht', 'ps', 'tk', 'nn', 'mt', 'sa', 'lb', 'my', 'bo', 'tl', 'mg', 'as', 'tt', 'haw', 'ln', 'ha', 'ba', 'jw', 'su', 'my', 'ca', 'nl', 'ht', 'lb', 'ps', 'pa', 'ro', 'ro', 'si', 'es'
                 \nMore information can be found in the technical documentation({url.to_text()})."""
             )
-        demo = gr.Blocks(css=".gradio-container {background: url('https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 50px; background-size: 90px 45px;}")
+        demo = gr.Blocks(css=".gradio-container {background: url ('https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 50px; background-size: 90px 45px;}")
         micro_transcribe = gr.Interface(
         # demo = gr.Interface(
             fn=self.transcribe_microphone,
