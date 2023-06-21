@@ -36,4 +36,4 @@ python3 -m main
 ## To interact with the API:
 * <u>Interactive mode</u>: http://localhost:8000/
 * <u>cURL-call</u>:
-curl -X POST http://localhost:8000/run/predict/ -H 'Content-Type: application/json' -d '{"data": ["language code","", "audio file path"]}'
+curl -X POST http://localhost:8000/run/predict/ -H 'Content-Type: application/json' -d '{"data": ["de",null,{ "data": "C:/Users/ASUS/Downloads/trans_audio.mp3"}]}'

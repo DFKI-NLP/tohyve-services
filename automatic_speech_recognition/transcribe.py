@@ -64,11 +64,12 @@ class ASR:
                 'en', 'zh', 'de', 'es', 'ru', 'ko', 'fr', 'ja', 'pt', 'tr', 'pl', 'ca', 'nl', 'ar', 'sv', 'it', 'id', 'hi', 'fi', 'vi','he', 'uk', 'el', 'ms', 'cs', 'ro', 'da', 'hu', 'ta', 'no', 'th', 'ur', 'hr', 'bg', 'lt', 'la', 'mi', 
                 'ml', 'cy', 'sk', 'te', 'fa', 'lv', 'bn', 'sr', 'az', 'sl', 'kn', 'et', 'mk', 'br', 'eu', 'is', 'hy', 'ne', 'mn', 'bs', 'kk', 'sq', 'sw',  'gl', 'mr', 'pa', 'si', 'km', 'sn', 'yo', 'so', 'af', 'oc', 'ka', 'be', 'tg', 'sd', 
                 'gu', 'am', 'yi', 'lo', 'uz', 'fo', 'ht', 'ps', 'tk', 'nn', 'mt', 'sa', 'lb', 'my', 'bo', 'tl', 'mg', 'as', 'tt', 'haw', 'ln', 'ha', 'ba', 'jw', 'su', 'my', 'ca', 'nl', 'ht', 'lb', 'ps', 'pa', 'ro', 'ro', 'si', 'es'
-                \nMore information can be found in the technical documentation({url.to_text()})."""
+                \nMore information can be found in the technical documentation ({url.to_text()})."""
             )
-        demo = gr.Blocks(css=".gradio-container {background: url ('https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 50px; background-size: 90px 45px;}")
+        demo = gr.Blocks(css=".gradio-container {background: url('https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 50px; background-size: 90px 45px;}")
+        
+        # interface for microphone
         micro_transcribe = gr.Interface(
-        # demo = gr.Interface(
             fn=self.transcribe_microphone,
             inputs=[
                 gr.components.Textbox(lines=1, placeholder="e.g. de or en", type="text"),
@@ -76,17 +77,14 @@ class ASR:
                 "state",
             ],
             outputs=[ "textbox", "state"],
-            # css=css_code,
             title=title,
             description=description,
             live=True,
-            allow_flagging="never",
-            # auto_submit=True,
-            
+            allow_flagging="never",   
         )
-
+        
+        # interface for file upload
         file_transcribe = gr.Interface(
-        # demo = gr.Interface(
             fn=self.transcribe_file,
             inputs=[
                 gr.components.Textbox(lines=1, placeholder="e.g. de or en", type="text"),
