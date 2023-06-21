@@ -80,9 +80,10 @@ class ASR:
             title=title,
             description=description,
             live=True,
-            allow_flagging="never",   
+            show_progress="hidden",
+            allow_flagging="never" 
         )
-        
+
         # interface for file upload
         file_transcribe = gr.Interface(
             fn=self.transcribe_file,
