@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM huggingface/transformers-pytorch-gpu:4.29.2
 
 EXPOSE 8000
 
