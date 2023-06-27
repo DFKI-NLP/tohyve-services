@@ -20,7 +20,7 @@ with open(audio_path, "rb") as f:
             }
         ]
     }
-    url = "https://dfki-3109.dfki.de/run/predict"
+    url = "https://dfki-3109.dfki.de/asr/run/predict"
     response = requests.post(url, json=request_body, headers=headers)
 
     print(json.dumps(response.json(), indent=4))
