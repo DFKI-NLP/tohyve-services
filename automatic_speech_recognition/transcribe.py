@@ -2,6 +2,7 @@ import gradio as gr
 import hyperlink
 import time
 
+
 # ASR Class
 class ASR:
     # initialize model and model name
@@ -11,7 +12,7 @@ class ASR:
 
 
     # transcreibe method for microphone streaming
-    def transcribe_microphone(self, Input_language, Microphone, state=""):
+    def transcribe_microphone(self, Input_language, Microphone,  state=""):
         if Microphone is None:
             state =""
             return state, state
@@ -19,19 +20,13 @@ class ASR:
             return "ERROR: You didn't set transcribe language code!\n"
         
         self.pipe.model.config.forced_decoder_ids = self.pipe.tokenizer.get_decoder_prompt_ids(language=Input_language, task="transcribe")
-        warn_output = ""
-
-        # file = Microphone if Microphone is not None else File_upload
-        text = self.pipe(Microphone)["text"]
-        if text[:3] == "you": # While testing with "English", Initially its listening "you" and put it in the begining of the sentence.
-            text = ""
-        state += text
-        if Microphone:
-            return state, state
-        else:
-            return warn_output + text
         
+        # time.sleep(10)
+        text = self.pipe(Microphone)["text"]
+        state += text + " "
+        return state, state
 
+        
     # transcreibe method for audio file upload
     def transcribe_file(self, Input_language, File_upload):
         warn_output = ""
@@ -73,14 +68,14 @@ class ASR:
             fn=self.transcribe_microphone,
             inputs=[
                 gr.components.Textbox(lines=1, placeholder="e.g. de or en", type="text"),
-                gr.components.Audio(source="microphone", type="filepath", streaming=True),
+                gr.Audio(source="microphone", type="filepath", streaming=True),
                 "state",
             ],
-            outputs=[ "textbox", "state"],
+            outputs=["textbox", "state"],
             title=title,
             description=description,
             live=True,
-            show_progress="hidden",
+            # auto_submit_duration=20,
             allow_flagging="never" 
         )
 
