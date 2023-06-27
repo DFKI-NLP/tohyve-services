@@ -3,7 +3,7 @@ import base64
 import json
 
 
-audio_path = "C:/Users/ASUS/Downloads/speech_de.mp3"
+audio_path = "C:/Users/ASUS/Downloads/speech_en.wav" # this need to be change according to the file path
 
 with open(audio_path, "rb") as f:
     base64_encoded_audio = base64.b64encode(f.read())
@@ -11,9 +11,9 @@ with open(audio_path, "rb") as f:
 
     headers = {"Content-Type": "application/json"}
     request_body = {
-        "fn_index":3,
+        "fn_index":4,
         "data": [
-            "de",
+            "en", # this need to be change according to the audio language code 
             {
                 "data":"data:audio/wav;base64," + str(base64_encoded_audio),
                 "name": "sample_audio.mp3"
