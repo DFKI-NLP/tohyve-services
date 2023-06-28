@@ -1,6 +1,20 @@
 import gradio as gr
 import hyperlink
 import time
+import uvicorn
+
+
+from fastapi import FastAPI
+
+
+app = FastAPI()
+    
+# @app.get("/")
+# def read_main():
+#     return {"message": "This is your main app"}
+
+
+CUSTOM_PATH = "/"
 
 
 # ASR Class
@@ -10,21 +24,26 @@ class ASR:
         self.pipe = pipe
         self.MODEL_NAME = MODEL_NAME
 
-
+    
     # transcreibe method for microphone streaming
     def transcribe_microphone(self, Input_language, Microphone,  state=""):
-        if Microphone is None:
+        if Input_language is None or Microphone is None:
             state =""
             return state, state
-        if Input_language is None:
-            return "ERROR: You didn't set transcribe language code!\n"
+        
+        if Input_language and Input_language[0]=="d":
+            Input_language = "de"
+        elif Input_language and Input_language[0]=="e":
+            Input_language = "en"
+        # if Input_language is None:
+        #     return "ERROR: You didn't set transcribe language code!\n"
         
         self.pipe.model.config.forced_decoder_ids = self.pipe.tokenizer.get_decoder_prompt_ids(language=Input_language, task="transcribe")
         
         # time.sleep(10)
         text = self.pipe(Microphone)["text"]
         state += text + " "
-        return state, state
+        return text, state
 
         
     # transcreibe method for audio file upload
@@ -95,6 +114,14 @@ class ASR:
         with demo:
             gr.TabbedInterface([micro_transcribe, file_transcribe], ["Transcribe Microphone", "Transcribe File"])
 
-        demo.launch(server_name="0.0.0.0", server_port=8000)# to change port number, we can change "server_port" 
-        # demo.launch(server_name="0.0.0.0", server_port=8000, share=True)# to launch it to gradio public server
+
+        # gradio_app = gr.routes.App.create_app(demo)
+        # app.mount(CUSTOM_PATH, gradio_app)
+        global app 
+        app = gr.mount_gradio_app(app, demo, path=CUSTOM_PATH)
+        # demo.launch(server_name="0.0.0.0", server_port=8000)# to change port number, we can change "server_port" 
+        # # demo.launch(server_name="0.0.0.0", server_port=8000, share=True)# to launch it to gradio public server
+        
+        # uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) # this command will use for development purposes only
+        uvicorn.run("transcribe:app", host="0.0.0.0", port=8000)
         return

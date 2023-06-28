@@ -10,12 +10,13 @@ import traceback
 import sys
 import warnings
 
+
 from transcribe import ASR
 from model import init_model
 
 warnings.filterwarnings('ignore')
 
-
+# init our model
 pipe, MODEL_NAME = init_model()
 
 # method to launch Gradio!
