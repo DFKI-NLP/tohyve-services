@@ -14,7 +14,7 @@ app = FastAPI()
 #     return {"message": "This is your main app"}
 
 
-CUSTOM_PATH = "/"
+CUSTOM_PATH = "/asr"
 
 
 # ASR Class
@@ -123,5 +123,5 @@ class ASR:
         # # demo.launch(server_name="0.0.0.0", server_port=8000, share=True)# to launch it to gradio public server
         
         # uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) # this command will use for development purposes only
-        uvicorn.run("transcribe:app", host="0.0.0.0", port=8000)
+        uvicorn.run("transcribe:app", host="0.0.0.0", port=8001)
         return
