@@ -16,7 +16,11 @@ docker run --rm -it -p 8000:8000/tcp dfkitohyve/asr:1.0
 GPU
 ```
 docker run --gpus '"device=0"' --rm -it -p 8001:8001/tcp akhyarahmed/asr:gpu-cuda12.2
+or
+docker run --gpus all --rm -it -p 8001:8001/tcp akhyarahmed/asr:gpu-cuda12.2
 ```
+
+
 
 
 ## Installing in Local Environment:
