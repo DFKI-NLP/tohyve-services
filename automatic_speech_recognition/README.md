@@ -47,6 +47,6 @@ setx PATH "<path of unzipped ffmpeg>;%PATH%"
 python3 -m main
 ```
 ## To interact with the API:
-* <u>Interactive mode</u>: http://localhost:8000/
+* <u>Interactive mode</u>:  https://dfki-3109.dfki.de/asr/
 * <u>cURL-call</u>:
 curl -X POST https://dfki-3109.dfki.de/run/predict -H 'Content-Type: application/json' -d '{"fn_index":3, "data": ["de",{ "data": "data:audio/wav;base64,"+str(base64_encoded_wav), "name": "sample_audio.mp3"}]}'
