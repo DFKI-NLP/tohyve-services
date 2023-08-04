@@ -4,20 +4,20 @@ It's a tool to extract streaming audio or take an audio file(mp3) than transfrom
 ## Installing Using Docker:
 * To Pull it: 
 ```
-docker pull dfkitohyve/asr:1.0
+docker pull dfkitohyve/asr:gpu-cuda12.2
 ```
 * To Run it: 
 
 CPU
 ```
-docker run -p 8000:8000/tcp dfkitohyve/asr:1.0
+docker run -p 8000:8000/tcp dfkitohyve/asr:gpu-cuda12.2
 ```
 
 GPU
 ```
-docker run --gpus '"device=0"' -p 8001:8001/tcp akhyarahmed/asr:gpu-cuda12.2
+docker run --gpus '"device=0"' -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda12.2
 or
-docker run --gpus all -p 8001:8001/tcp akhyarahmed/asr:gpu-cuda12.2
+docker run --gpus all -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda12.2
 ```
 
 
