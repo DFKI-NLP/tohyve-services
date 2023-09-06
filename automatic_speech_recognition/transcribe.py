@@ -3,16 +3,10 @@ import hyperlink
 import time
 import uvicorn
 
-
 from fastapi import FastAPI
 
 
 app = FastAPI()
-    
-# @app.get("/")
-# def read_main():
-#     return {"message": "This is your main app"}
-
 
 CUSTOM_PATH = "/asr"
 
@@ -66,7 +60,7 @@ class ASR:
             margin-left:auto;\
             margin-right:auto;\
             width:100%;\
-            background-image:url("https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png");\
+            background-image:url("https://drive.google.com/uc?export=view&id=1OQwYvj-dxycUq_IyM1t7qlO5LjA40MTs");\
             background-repeat: no-repeat;\
             background-size: auto;\
             background-position: relative;\
@@ -80,7 +74,7 @@ class ASR:
                 'gu', 'am', 'yi', 'lo', 'uz', 'fo', 'ht', 'ps', 'tk', 'nn', 'mt', 'sa', 'lb', 'my', 'bo', 'tl', 'mg', 'as', 'tt', 'haw', 'ln', 'ha', 'ba', 'jw', 'su', 'my', 'ca', 'nl', 'ht', 'lb', 'ps', 'pa', 'ro', 'ro', 'si', 'es'
                 \nMore information can be found in the technical documentation ({url.to_text()})."""
             )
-        demo = gr.Blocks(css=".gradio-container {background: url('https://www.dfki.de/fileadmin/user_upload/DFKI/Medien/Logos/Logos_DFKI/DFKI_Logo.png'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 50px; background-size: 90px 45px;}")
+        demo = gr.Blocks(css=".gradio-container {background: url('https://drive.google.com/uc?export=view&id=1OQwYvj-dxycUq_IyM1t7qlO5LjA40MTs'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 40px; background-size: 150px 75px;}")
         
         # interface for microphone
         micro_transcribe = gr.Interface(

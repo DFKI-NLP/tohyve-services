@@ -10,7 +10,7 @@ def init_model():
     MODEL_NAME = "openai/whisper-medium" # we can change this name to change whisper model type
     path = "models/"
 
-    if os.path.exists(path): # this is for my local env
+    if os.path.exists(path+"/whisper-medium"): # this is for my local env
         pipe = pipeline(
         task="automatic-speech-recognition",
         model=path+"/whisper-medium",

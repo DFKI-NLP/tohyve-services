@@ -25,9 +25,9 @@ WORKDIR /app
 # Copy model files and dependencies into the container
 COPY models/ /app/models/
 
+# Add all necessary scripts
 ADD main.py /app
 ADD model.py /app
 ADD transcribe.py /app
-
 
 CMD ["python3", "-m", "main"]
