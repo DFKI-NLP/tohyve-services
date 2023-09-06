@@ -1,4 +1,4 @@
-# DFKI NLU Machine Translator Tool
+# Machine Translator Tool
 Its a tool to translate a speciafic language text into a targeted language text. For machine translation it uses a huggingface pretrained model <u>[facebook/m2m100_418M](https://huggingface.co/facebook/m2m100_418M)</u> developed by facebookresearch. **M2M100 418M** is a multilingual encoder-decoder (seq-to-seq) model trained for Many-to-Many multilingual translation. The model that can directly translate between the 9,900 directions of 100 languages. It was first introduced in a paper called <u>[*Beyond English-Centric Multilingual Machine Translation*](https://arxiv.org/abs/2010.11125)</u>. The tool takes a **text**(string), **text_language** code (See ***Language Covered*** section below for the language code!!) and a **target_language** (See ***Language Covered*** section below for the language code!!). We did this translation sentence-wise just to avoid maximum length exceed issue. Our tool can translate directly between any pair of 50 languages. After translation you can download it as JSON! (See **Sample Output**.)
 
 ## Language Covered: 
