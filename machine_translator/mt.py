@@ -8,18 +8,13 @@ import sys
 import os
 
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from translator import translate_text
 
 
 app = FastAPI()
 
-if os.path.exists("/app/images/"):
-    app.mount("/app/images", StaticFiles(directory="/app/images"), name='images')
-else:
-    app.mount("/images", StaticFiles(directory="images"), name='images')
 
-CUSTOM_PATH = "/mt/"
+CUSTOM_PATH = "/mt"
 
 # MT Class
 class MT:
@@ -66,7 +61,7 @@ class MT:
                 'gu', 'am', 'yi', 'lo', 'uz', 'fo', 'ht', 'ps', 'tk', 'nn', 'mt', 'sa', 'lb', 'my', 'bo', 'tl', 'mg', 'as', 'tt', 'haw', 'ln', 'ha', 'ba', 'jw', 'su', 'my', 'ca', 'nl', 'ht', 'lb', 'ps', 'pa', 'ro', 'ro', 'si', 'es'
                 \nMore information can be found in the technical documentation ({url.to_text()})."""
             )
-        demo = gr.Blocks(css=".gradio-container {background-image:url('https://drive.google.com/uc?export=view&id=1OQwYvj-dxycUq_IyM1t7qlO5LjA40MTs'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 50px; background-size: 125px 55px;}")
+        demo = gr.Blocks(css=".gradio-container {background-image:url('https://drive.google.com/uc?export=view&id=1OQwYvj-dxycUq_IyM1t7qlO5LjA40MTs'); background-repeat: no-repeat; background-attachment:absolute; background-position: 30px 40px; background-size: 150px 75px;}")
         
         # interface for microphone
         text_translate = gr.Interface(

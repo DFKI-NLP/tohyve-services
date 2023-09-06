@@ -1,5 +1,5 @@
-# FROM nvidia/cuda:12.2.0-base-ubuntu20.04
-FROM nvidia/cuda:11.6.2-base-ubuntu20.04
+FROM nvidia/cuda:12.2.0-base-ubuntu20.04
+# FROM nvidia/cuda:11.6.2-base-ubuntu20.04
 
 EXPOSE 8002
 
@@ -20,19 +20,15 @@ RUN python3 -m pip install -r requirements.txt
 
 # Create a directory to store model files inside the container
 RUN mkdir -p /app/models
-RUN mkdir -p /app/images
 WORKDIR /app
 
 # Copy model files and dependencies into the container
 COPY models/ /app/models/
-COPY images/ /app/images/
 
 # Add all necessary scripts
-# ADD DFKI_ToHyVe_logo.jpg /app
 ADD main.py /app
 ADD model.py /app
 ADD translator.py /app
 ADD mt.py /app
-# ADD  . /app
 
-CMD ["python3", "-m", "main"]
+CMD ["python3", "-m", "main"] 
