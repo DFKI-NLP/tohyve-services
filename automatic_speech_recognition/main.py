@@ -3,7 +3,7 @@ To start it:
 python -m main
 
 To use it go to:
-http://localhost:8000/
+http://localhost:8001/asr/
 
 '''
 import traceback
