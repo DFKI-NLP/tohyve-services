@@ -7,8 +7,16 @@ It's a tool to take a text and create a speech out of it. For speech transformat
 docker pull dfkitohyve/tts:1.0
 ```
 * To Run it: 
+CPU
 ```
-docker run --rm -it -p 8000:8000/tcp dfkitohyve/tts:1.0
+docker run -p 8003:8003/tcp dfkitohyve/tts:gpu-cuda12.2.0
+```
+
+GPU
+```
+docker run --gpus '"device=0"' -p 8003:8003/tcp dfkitohyve/tts:gpu-cuda12.2.0
+or
+docker run --gpus all -p 8003:8003/tcp dfkitohyve/tts:gpu-cuda12.2
 ```
 ## Installing in Local Environment:
 ### Pre-requsites:
@@ -34,7 +42,7 @@ setx PATH "<path of unzipped ffmpeg>;%PATH%"
 python3 -m main
 ```
 ## To interact with the API:
-* <u>Interactive mode</u>: http://localhost:8000/docs
+* <u>Interactive mode</u>: https://dfki-3109.dfki.de/tts/
 * <u>cURL-call</u>:
 curl -X 'POST' \
   'http://localhost:8000/convert-speech/?text=hello%2C%20what%20is%20your%20name%3F%20where%20are%20you%20from%3F&text_language=en' \
