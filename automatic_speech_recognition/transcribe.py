@@ -54,7 +54,7 @@ class ASR:
 
 
     # method which launch Gradio to do ASR
-    def do_asr(self):
+    def do_asr(self) -> None:
         url = hyperlink.parse(u"https://github.com/DFKI-NLP/tohyve-services/tree/master/automatic_speech_recognition")
         css_code = 'div {\
             margin-left:auto;\
