@@ -10,7 +10,7 @@ docker pull dfkitohyve/asr:gpu-cuda12.2
 
 CPU
 ```
-docker run -p 8000:8000/tcp dfkitohyve/asr:gpu-cuda12.2
+docker run -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda12.2
 ```
 
 GPU
