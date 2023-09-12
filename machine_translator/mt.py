@@ -1,11 +1,9 @@
 
 import gradio as gr
 import hyperlink
-import time
 import uvicorn
 import traceback
 import sys
-import os
 
 from fastapi import FastAPI
 from translator import translate_text
@@ -24,7 +22,7 @@ class MT:
 
     
     # translation method for textbox translation
-    def get_translation(self, text_language, text, target_language):
+    def get_translation(self, text_language, text, target_language) -> str:
         if text_language is None:
             return "Input language is missing!!"
         elif target_language is None:
@@ -42,7 +40,7 @@ class MT:
         return translated_text
 
     # method which launch Gradio to do MT
-    def do_mt(self):
+    def do_mt(self) -> None:
         url = hyperlink.parse(u"https://github.com/DFKI-NLP/tohyve-services/tree/master/machine_translator")
         css_code = 'div {\
             margin-left:auto;\
