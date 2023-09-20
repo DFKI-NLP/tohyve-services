@@ -3,7 +3,7 @@ import base64
 import json
 
 
-audio_path = "C:/Users/ASUS/Downloads/speech_en.wav" # this need to be change according to the file path
+audio_path = "C:/file_path/speech_en.wav" # this need to be change according to the file path
 
 with open(audio_path, "rb") as f:
     base64_encoded_audio = base64.b64encode(f.read())
