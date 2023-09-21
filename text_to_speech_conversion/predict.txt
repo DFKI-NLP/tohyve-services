@@ -1,0 +1,1 @@
+{"data":[{"name":"/tmp/gradio/2cf38116657fa82ba06c05fe9e04b4fcd44dee44/speech.wav","data":null,"is_file":true,"orig_name":"speech.wav"}],"is_generating":false,"duration":0.1552410125732422,"average_duration":1.4856630116701126}
