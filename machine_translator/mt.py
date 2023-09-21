@@ -36,7 +36,7 @@ class MT:
             # below is the traceback
             type_, value_, traceback_ = sys.exc_info()
             error_ls = traceback.format_exception(type_, value_, traceback_)
-            return error_ls[-1]
+            return error_ls
         return translated_text
 
     # method which launch Gradio to do MT
