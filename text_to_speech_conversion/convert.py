@@ -48,7 +48,7 @@ class TTS:
                 os.remove(audio_file_path)
 
             with open(audio_file_path, "wb") as audio_file:
-                sf.write(audio_file, np.ravel(audio.detach().numpy()), 22050)
+                sf.write(audio_file, np.ravel(audio.detach().cpu().numpy()), 22050)
         except Exception:
             # below is the traceback
             type_, value_, traceback_ = sys.exc_info()
