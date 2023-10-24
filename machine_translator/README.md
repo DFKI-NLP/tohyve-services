@@ -2,22 +2,23 @@
 Its a tool to translate a speciafic language text into a targeted language text. For machine translation it uses a huggingface pretrained model <u>[facebook/m2m100_418M](https://huggingface.co/facebook/m2m100_418M)</u> developed by facebookresearch. **M2M100 418M** is a multilingual encoder-decoder (seq-to-seq) model trained for Many-to-Many multilingual translation. The model that can directly translate between the 9,900 directions of 100 languages. It was first introduced in a paper called <u>[*Beyond English-Centric Multilingual Machine Translation*](https://arxiv.org/abs/2010.11125)</u>. The tool takes a **text**(string), **text_language** code (See ***Language Covered*** section below for the language code!!) and a **target_language** (See ***Language Covered*** section below for the language code!!). We did this translation sentence-wise just to avoid maximum length exceed issue. Our tool can translate directly between any pair of 50 languages. After translation you can download it as JSON! (See **Sample Output**.)
 
 ## Installing Using Docker:
-* To Pull it: 
+### To Pull it: 
+* Medium model (~16GB)
+```hs
+docker pull dfkitohyve/mt:gpu-cuda-12.2.0
 ```
-docker pull dfkitohyve/mt:gpu-cuda12.2.0
-```
-* To Run it: 
+
+### To Run it: 
 
 CPU
-```
-docker run -p 8002:8002/tcp dfkitohyve/mt:gpu-cuda12.2.0
+```hs
+docker run -p 8002:8002/tcp dfkitohyve/mt:gpu-cuda-12.2.0
 ```
 
 GPU
-```
-docker run --gpus '"device=0"' -p 8002:8002/tcp dfkitohyve/mt:gpu-cuda12.2.0
-or
-docker run --gpus all -p 8002:8002/tcp dfkitohyve/mt:gpu-cuda12.2.0
+```hs
+docker run --gpus '"device=0"' -p 8002:8002/tcp dfkitohyve/mt:gpu-cuda-12.2.0
+
 ```
 
 
@@ -46,7 +47,7 @@ setx PATH "<path of unzipped ffmpeg>;%PATH%"
 ```
 python3 -m main
 ```
-## To interact with the API:
+## To interact with the tool:
 * <u>Interactive mode</u>:  https://dfki-3109.dfki.de/mt/
 * <u>cURL call:</u>: 
 ```
@@ -65,3 +66,92 @@ Where [curl.json](https://github.com/DFKI-NLP/tohyve-services/blob/master/machin
     ]
 }
 ```
+
+
+## API Documentation:
+
+### Base URL:
+https://dfki-3109.dfki.de
+
+### Endpoints:
+**1. GET MT Interaction Page:**
+```hs
+GET /mt
+```
+
+**Description**
+
+Get the details and the MT capabilities for a text.
+
+**Parameters**
+
+```
+text_language (string, required): Language code of the input text.
+text (string, required): Input text.
+target_language (string, required): Language code of the target language.
+```
+**Request Body**
+```hs
+{ 
+    "data": [
+        "input_language", # this need to be change according to the input text's language code
+        "text", # input text
+        "target_language" # this need to be change according to the desired text language code
+    ]
+}
+```
+
+**Response**
+```hs
+{
+    "data":["translated text"],
+    "is_generating":boolean response,
+    "duration":time to produce result,
+    "average_duration":average time to produce each result
+}
+```
+
+
+**2. Direct Machine Translation Request:**
+```hs
+POST /mt/run/predict
+```
+
+**Description**
+
+Produce tranlation for a text.
+
+**Parameters**
+
+```
+data (list, required): A list contains three elements which are, input_language, text, and target_language. 
+input_language (string, required): Language code of the input text.
+text (string, required): Input text.
+target_language (string, required): Language code of the target language.
+```
+**Request Body**
+```hs
+{ 
+    "data": [
+        "input_language", # this need to be change according to the input text's language code
+        "text", # input text
+        "target_language" # this need to be change according to the desired text language code
+    ]
+}
+```
+
+**Response**
+```hs
+{
+    "data":["translated text"],
+    "is_generating":boolean response,
+    "duration":time to produce result,
+    "average_duration":average time to produce each result
+}
+```
+
+## Error Handling
+* 400 Bad Request: Invalid request parameters.
+* 404 Not Found: Resource not found.
+
+
