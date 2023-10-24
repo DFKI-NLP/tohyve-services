@@ -39,7 +39,7 @@ pip install -r requirements.txt
 
 * downlaod ffmpeg from https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z
 * than  unzip it and set new environment path using cmd
-```
+```hs
 setx PATH "<path of unzipped ffmpeg>;%PATH%"
 ``` 
 
@@ -50,14 +50,14 @@ python3 -m main
 ## To interact with the tool:
 * <u>Interactive mode</u>:  https://dfki-3109.dfki.de/mt/
 * <u>cURL call:</u>: 
-```
+```hs
 	curl -X POST \
 	-H "Content-Type:application/json" \
 	-d @curl.json \
 	https://dfki-3109.dfki.de/mt/run/predict  
 ```
 Where [curl.json](https://github.com/DFKI-NLP/tohyve-services/blob/master/machine_translator/curl.json) is a JSON file, which contains input data.
-```
+```hs
 {
     "data": [
         "en",
