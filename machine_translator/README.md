@@ -3,7 +3,7 @@ Its a tool to translate a speciafic language text into a targeted language text.
 
 ## Installing Using Docker:
 ### To Pull it: 
-* Medium model (~16GB)
+* Container Size (~9GB)
 ```hs
 docker pull dfkitohyve/mt:gpu-cuda-12.2.0
 ```
@@ -94,7 +94,7 @@ target_language (string, required): Language code of the target language.
 ```hs
 { 
     "data": [
-        "input_language", # this need to be change according to the input text's language code
+        "text_language", # this need to be change according to the input text's language code
         "text", # input text
         "target_language" # this need to be change according to the desired text language code
     ]
