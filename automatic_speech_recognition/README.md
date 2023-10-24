@@ -13,7 +13,7 @@ docker pull dfkitohyve/asr:gpu-cuda-12.2.0
 docker pull dfkitohyve/tohyveservices:asr-large-cuda-12.2.0
 ```
 
-* To Run it: 
+### To Run it: 
 
 CPU
 ```hs
@@ -23,8 +23,6 @@ docker run -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda-12.2.0
 GPU
 ```hs
 docker run --gpus '"device=0"' -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda-12.2.0
-or
-docker run --gpus all -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda-12.2.0
 ```
 
 
@@ -53,7 +51,7 @@ setx PATH "<path of unzipped ffmpeg>;%PATH%"
 ```
 python3 -m main
 ```
-## To interact with the API:
+## To interact with the tool:
 * <u>Interactive mode</u>:  https://dfki-3109.dfki.de/asr/
 * API call through [Python script](https://github.com/DFKI-NLP/tohyve-services/blob/master/automatic_speech_recognition/request_example.py)
 
@@ -82,7 +80,7 @@ input_language (string, required): Language code of the input audio.
 {
     "fn_index":4, # always use 4, it's a fixed code from the Gradio 
     "data": [
-        "input_languge", # this need to be change according to the audio language code 
+        "input_language", # this need to be change according to the audio language code 
         {
             "data":"data:audio/wav;base64," + str(base64_encoded_audio),
             "name":"sample_audio.mp3" # just give any name
@@ -117,16 +115,16 @@ Produce transcriptions for a single audio.
 fn_index (integer, required): 4(A constant number!) 
 data (list, required): A list which contains input_language and a dictionary. 
 input_language (string, required): Language code of the input audio.
-a dictionary (dictioanry, required): contains two elements, data and name.
-inner data (string, required): base64 encoded string for the input audio.
-name (string, required): a name for the audio.
+a dictionary (dictioanry, required): Contains two elements, data and name.
+inner data (string, required): Base64 encoded string for the input audio.
+name (string, required): A name for the audio.
 ```
 **Request Body**
 ```hs
 {
     "fn_index":4, # always use 4, it's a fixed code from the Gradio 
     "data": [
-        "input_languge", # this need to be change according to the audio language code 
+        "input_language", # this need to be change according to the audio language code 
         {
             "data":"data:audio/wav;base64," + str(base64_encoded_audio),
             "name":"sample_audio.mp3" # just give any name
@@ -144,3 +142,6 @@ name (string, required): a name for the audio.
     "average_duration":average time to produce each result
 }
 ```
+## Error Handling
+* 400 Bad Request: Invalid request parameters.
+* 404 Not Found: Resource not found.
