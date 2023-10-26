@@ -1,5 +1,7 @@
+# Use an official Python runtime as a parent image
 FROM python:3.10
 
+# Expose port 8005
 EXPOSE 8005
 
 # Set environment variables
@@ -7,22 +9,20 @@ ENV FLASK_APP=app.py
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-# USER root
-# RUN apt-get update
-# RUN apt-get install -y python3-pip
-
+# Install the project dependencies
 ADD requirements.txt .
-RUN python -m pip install -r requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
 # Create a directory to store model files inside the container
 RUN mkdir -p /app/templates
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy model files and dependencies into the container
-COPY templates/ /app/templates/
+# Copy all necessary scripts
+COPY templates/ /app/templates
 
-# Copy the application files
-# Add all necessary scripts
+# Add all the application code into the container
 ADD websocket_.py /app
 ADD main.py /app
 
