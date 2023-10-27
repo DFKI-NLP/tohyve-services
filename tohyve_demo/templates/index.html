@@ -24,6 +24,7 @@
 
 <body >
     <div class="container mt-5">
+        <!-- Top Tab -->
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#uploadTab">File Upload</a>
@@ -37,7 +38,23 @@
             <!-- Upload & Convert to Base64 Tab -->
             <div class="tab-pane container active" id="uploadTab">
                 <h3 class="mt-3">ToHyVe Demo: Upload Audio File and Select Language Codes</h3>
+                <!-- File upload -->
                 <input type="file" id="audioFile" accept=".mp3, .wav, .ogg" class="form-control mt-3">
+                <!-- Progress Modal -->
+                <div class="modal" id="progressModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <label class="ustom-file-label">Data Loading...</label>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                                        aria-valuemax="100">0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dropdown div -->
                 <div class="dropdown-container" style="margin-top: 20px;">
                     <!-- First Dropdown (Default: de) -->
                     <label for="source_language">Audio Language:</label>
@@ -52,10 +69,24 @@
                         <option value="de">German</option>
                     </select>
                 </div>
-                
-                <div style="display: flex; justify-content: center; align-items: center;text-align: center;">
+                <!-- Run Button -->
+                <div style="display: flex; justify-content: center; align-items: center;text-align: center;" data-toggle="modal" data-target="#loadingModal">
                     <button class="btn btn-primary mt-3" onclick="convertToBase64()">Run Demo</button>
                 </div>
+                <!-- Loading Modal -->
+                <div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p>Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Response Textbox -->
                 <div class="mt-2">
                     <h6>ASR Response:</h6>
                     <textarea id="asrResult" class="form-control" rows="5" readonly></textarea>
@@ -68,10 +99,9 @@
                     <h6>TTS Response:</h6>
                     <input type="text" id="ttsResult" class="form-control" placeholder="" disabled>
                 </div>
-
+                <!-- Fileupload Audio Player -->
                 <audio id="filePlayer" controls autoplay style="display: none;" style="margin-top: 10px;"></audio>
             </div>
-
             <!-- Audio Streaming Tab -->
             <div class="tab-pane container fade" id="streamingTab">
                 <h3 class="mt-3">ToHyVe Demo: Start Audio Streaming by Selecting Language Codes</h3>
@@ -89,6 +119,7 @@
                         <option value="de">German</option>
                     </select>
                 </div>
+                <!-- Start, Pause Button -->
                 <div style="display: flex; justify-content: center; align-items: center;text-align: center;">
                     <button class="btn btn-primary mt-3" id="startButton" style="margin-right: 10px;" >Start</button>
                     <button class="btn btn-primary mt-3" id="pauseButton" >Pause</button>
@@ -101,7 +132,7 @@
                         </tr>
                     </table>
                 </div>
-                
+                <!-- Streaming Audio Player -->
                 <audio id="audioPlayer" controls autoplay style="display: none;"></audio>
             </div>
         </div>
@@ -122,8 +153,40 @@
         const targetLanguage = document.getElementById("target_language");
         var table = document.getElementById("streaming-response-table");
         var fileAudioElement = document.getElementById("filePlayer");
+        var audioFile = '';
+        // EventListener for the Progressbar
+        document.getElementById('audioFile').addEventListener('change', function(event) {
+            audioFile = document.getElementById('audioFile').files[0];
+            if (audioFile) {
+                var audioDuration = 7 * 1000; // 4.5 seconds in milliseconds
+                var progressInterval = 50; // Interval for updating the progress bar
+                var progressBar = document.querySelector('.progress-bar');
+                var startTime = new Date().getTime();
+                
+                // Show progress bar modal
+                $('#progressModal').modal('show');
 
-        // audioPlayer.style.display = 'none';
+                var interval = setInterval(function() {
+                    var currentTime = new Date().getTime();
+                    var elapsedTime = currentTime - startTime;
+                    var progress = (elapsedTime / audioDuration) * 100;
+
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        progressBar.style.width = '100%';
+                        progressBar.textContent = '100%';
+                        
+                        // Hide the progress bar modal after 3 seconds
+                        setTimeout(function() {
+                            $('#progressModal').modal('hide');
+                        }, 3000);
+                    } else {
+                        progressBar.style.width = progress + '%';
+                        progressBar.textContent = progress.toFixed(2) + '%';
+                    }
+                }, progressInterval);
+            }
+        });
 
         // method to remove elements
         function removeElements(){
@@ -133,22 +196,21 @@
                 table.deleteRow(i);
             }
         }
-
         // method for file upload
         function convertToBase64() {
             const socket = new WebSocket('wss://dfki-3109.dfki.de/ws');
-            var audioFile = document.getElementById('audioFile').files[0];
+            // var audioFile = document.getElementById('audioFile').files[0];
             if (audioFile) {
                 var fileSizeInMB = audioFile.size / (1024 * 1024); // Convert fileSize to MB
                 if (audioFile.type.includes('audio')){
-                    if (fileSizeInMB <= 25) {
+                    if (fileSizeInMB <= 15) {
                         var reader = new FileReader();
                         reader.onloadend = function () {
                             base64data = reader.result;
                         };
                         reader.readAsDataURL(audioFile);
                     } else{
-                        alert('Error: File size exceeds the allowed limit of 25MB.');
+                        alert('Error: File size exceeds the allowed limit of 15MB.');
                     }
                 } else{
                     alert('Error: Please upload a valid audio file.');
@@ -172,19 +234,27 @@
                     ],
                     target_language:targetLanguage.value
                 };
+                // console sending data
                 console.log(jsonData);
+                
                 // Send data to the server
                 socket.send(JSON.stringify(jsonData));
+                
+                // Show loading bar
+                $('#loadingModal').modal('show');
 
             };
 
             // Event handler for incoming messages
             socket.onmessage = (event) => {
+                // Hide the loading bar
+                $('#loadingModal').modal('hide');
+                
                 // Parse the JSON response
                 var jsonResponse = JSON.parse(event.data);
 
                 var keys = Object.keys(jsonResponse);
-                // Iterate over the keys and log them
+                // Iterate over the keys and send responses to the textbox
                 keys.forEach(function (key) {
                     if (key == "asr"){
                         document.getElementById('asrResult').value = jsonResponse[key].split("ASR:")[1];
@@ -204,6 +274,7 @@
                         }
                         const outputAudioBlob = new Blob([uint8Array], { type: 'audio/wav' });
                         
+                        // Show Audioplayer
                         fileAudioElement.style.display = "block";
 
                         // Set the audio element's source to the recorded audio
@@ -233,15 +304,17 @@
             // Event handler for when the connection is closed
             socket.onclose = function(event) {
                 if (event.wasClean) {
-                    console.log(`Closed cleanly, code=${event.code}, reason=${event.reason}`);
+                    console.log('Closed cleanly, code=${event.code}, reason=${event.reason}');
                 } else {
-                    console.error(`Connection died`);
+                    console.error('Connection died');
+                    // Hide the loading bar
+                    $('#loadingModal').modal('hide');
+                    alert('Connection died!!')
                 }
             };
         }
 
-
-        // method for streaming audio
+        // Method for streaming audio
         async function startStreaming() {
             const socket = new WebSocket('wss://dfki-3109.dfki.de/ws');
             try {
@@ -254,7 +327,7 @@
                         audioChunks.push(event.data);
                     }
                 };
-
+                // Media recorder on stop EventHandler
                 mediaRecorder.onstop = (event) => {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     var reader = new FileReader();

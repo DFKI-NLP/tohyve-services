@@ -22,10 +22,15 @@ def get_mt_formatted_data(asr_text, source_language, target_language):
 
 # format data for text to speech
 def get_tts_formatted_data(mt_text, target_language):
+    # Split the string into words using space as delimiter
+    words = mt_text.split()
+    
+    # Merge the first 25 words using space in between
+    merged_string = " ".join(words[:25])
     body = {
         "data": [
             target_language,
-            mt_text
+            merged_string
         ]
     }
     return body
