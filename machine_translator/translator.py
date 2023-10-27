@@ -39,7 +39,7 @@ def sentenceNormalization(all_sentences):
 def translateEachSentence_sync(mt_obj, sentence, source_language, target_language):
     mt_obj.tokenizer.src_lang = source_language
     encoded_text = mt_obj.tokenizer(sentence, return_tensors = "pt")
-    encoded_text = encoded_text.to("cuda:0")
+    encoded_text = encoded_text.to("cuda:0") # input text to cuda!!
     mt_obj.model = mt_obj.model.to("cuda:0")
     generated_tokens = mt_obj.model.generate(**encoded_text, forced_bos_token_id = mt_obj.tokenizer.lang_code_to_id[target_language])
     translated_sentence = mt_obj.tokenizer.batch_decode(generated_tokens, skip_special_tokens = True)
