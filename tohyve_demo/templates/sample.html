@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToHyVe Service Demo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .dropdown-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .dropdown {
+            flex: 1;
+            margin-right: 20px;
+            margin-left: 10px;
+        }
+        .header {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="tab-content mt-2">
+            <!-- Audio Streaming Tab -->
+            <h3 class="mt-3">ToHyVe Demo: Start Demo by Giving Streaming URL and Selecting Language Codes</h3>
+
+            <div class="dropdown-container">
+                <label for="streamingUrl">Streaming URL</label>
+                <input type="text" class="form-control" id="streamingUrl" placeholder="Enter Streaming URL">
+            </div>
+            <div class="dropdown-container" style="margin-top: 20px;">
+                <!-- First Dropdown (Default: de) -->
+                <label for="source_language">Streaming Language</label>
+                <select class="dropdown" id="source_language">
+                    <option value="de" selected>German</option>
+                    <option value="en">English</option>
+                    
+                </select>
+                <label for="target_language">Target Language</label>
+                <!-- Second Dropdown (Default: en) -->
+                <select class="dropdown" id="target_language">
+                    <option value="en" selected>English</option>
+                    <option value="de">German</option>
+                </select>
+            </div>
+            <!-- Start, Pause Button -->
+            <div style="display: flex; justify-content: center; align-items: center;text-align: center;">
+                <button class="btn btn-primary mt-3" id="startButton">Start</button>
+            </div>
+            <!-- Display response from the website -->
+            <div id="streaming-response" style="margin-top: 20px;">
+                <table id="streaming-response-table">
+                    <tr>
+                    <th></th>
+                    </tr>
+                </table>
+            </div>
+            <!-- Streaming Audio Player -->
+            <audio id="audioPlayer" controls autoplay style="display: none;"></audio>
+        </div>
+    </div>
+ 
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Include Axios via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    // Flag to track streaming status
+    let isStreamingFailed = 0; 
+    let base64data = '';
+    let audioFiles = [];
+    let currentTrack = 0;
+    let prevLength = 0;
+    const audioPlayer = document.getElementById('audioPlayer');
+    const streamUrl = document.getElementById('streamingUrl');
+    const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws';
+    const startButton = document.getElementById('startButton');
+    const responseDiv = document.getElementById('streaming-response');
+    const sourceLanguage = document.getElementById("source_language");
+    const targetLanguage = document.getElementById("target_language");
+    var table = document.getElementById("streaming-response-table");
+
+    // Connect to WebSocket
+    const socket = new WebSocket(websocketServerUrl);
+    // Event handler for socket connection
+    socket.onopen = function(event){
+        console.log('Connected to WebSocket server.');
+    };
+    // Create a CancelToken source
+    // const { cancel, token } = axios.CancelToken.source();
+    
+    // Function to convert ArrayBuffer to Base64
+    function arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return btoa( binary );
+    }
+
+    // Function to fetch audio data and return as ArrayBuffer
+    async function fetchAudioData(url) {
+        try {
+            // const response = await fetch(url);
+            // const arrayBuffer = await response.arrayBuffer();
+            const response = await fetch(url);
+            if (response.status == 200){
+                isStreamingFailed = 0;
+                return await response.arrayBuffer();
+            } else{
+                isStreamingFailed += 1;
+                throw new Error("Streaming finished");
+            }
+            // return arrayBuffer;
+        } catch (error) {
+            // console.error('Error fetching audio data:', error);
+            // throw error;
+            // Handle streaming finished case (status code not 200)
+            if (error.message === 'Streaming finished') {
+                console.log('Inner Streaming finished. Stopping data fetching.');
+            } else {
+                isStreamingFailed += 1;
+                console.error('Error fetching audio data:', error);
+            }
+        }
+    }
+
+    // Function which starts streaming
+    async function startStreaming() {
+        // Check if streaming is finished, stop fetching data if it is
+        if (isStreamingFailed > 5) {
+            console.log('Streaming is finished. Stopping data fetching.');
+            startButton.textContent = "Start";
+            return;
+        }
+        fetchAudioData(streamUrl.value)
+            .then(arrayBuffer => {
+                base64data = "data:audio/wav;base64," + arrayBufferToBase64(arrayBuffer);
+                // Format the data into a JSON object
+                const jsonData = {
+                    fn_index:4,
+                    data:[
+                        sourceLanguage.value,
+                        {
+                            data:base64data,
+                            name:"audio.mp3"
+                        }
+                    ],
+                    target_language:targetLanguage.value
+                };
+                if (socket.readyState === WebSocket.OPEN) {
+                    // Send audio data as base64 to WebSocket server
+                    socket.send(JSON.stringify(jsonData));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                startButton.textContent = "Start";
+            });
+    }
+
+    // Function to do streaing
+    function doStreaming(){
+        // Call the fetchData function at regular intervals (every 5 seconds in this example)
+        setInterval( () => {
+            if (isStreamingFailed<5){
+                startStreaming();
+            }
+        }, 10000); // 5000 milliseconds = 5 seconds
+    }
+
+    // Function with controls audio pipline
+    function playNextTrack() {
+        if (currentTrack < audioFiles.length) {
+            audioPlayer.src = URL.createObjectURL(audioFiles[currentTrack]);
+            // audioPlayer.play();
+            currentTrack++;
+            prevLength = audioFiles.length;
+        }
+    }
+
+    audioPlayer.addEventListener('ended', function() {
+        // Code to execute when audio playback ends
+        setInterval( () => {
+            if (prevLength < audioFiles.length){
+                playNextTrack();
+            }
+        }, 7000); // 5000 milliseconds = 5 seconds
+    });
+
+
+    // Event handler for socket incoming messages
+    socket.onmessage = (event) => {
+        // Parse the JSON response
+        var jsonResponse = JSON.parse(event.data);
+        var keys = Object.keys(jsonResponse);
+        // Iterate over the keys and log them
+        keys.forEach(function (key) {
+            if (key == "asr"){
+                var row = table.insertRow();
+                console.log('key Response:', jsonResponse[key]);
+                var asr_cell = row.insertCell(0);
+                asr_cell.innerHTML = jsonResponse[key];
+                var row = table.insertRow();
+                var asr_cell = row.insertCell(0);
+                asr_cell.innerHTML = "------------------------------------------------------------------";
+            }
+            if (key == "mt"){
+                var row = table.insertRow();
+                console.log('key Response:', jsonResponse[key]);
+                var mt_cell = row.insertCell(0);
+                mt_cell.innerHTML = jsonResponse[key];
+                var row = table.insertRow();
+                var mt_cell = row.insertCell(0);
+                mt_cell.innerHTML = "------------------------------------------------------------------";
+            }
+            if (key == "tts"){
+                var row = table.insertRow();
+                console.log('key Response:', jsonResponse[key]);
+                var tts_cell = row.insertCell(0);
+                tts_cell.innerHTML = jsonResponse[key];
+            }
+            if (key == "audio"){
+                const binaryAudioData = atob(jsonResponse["audio"]);
+                // Create a Uint8Array from the binary data
+                const uint8Array = new Uint8Array(binaryAudioData.length);
+                for (let i = 0; i < binaryAudioData.length; i++) {
+                    uint8Array[i] = binaryAudioData.charCodeAt(i);
+                }
+                const outputAudioBlob = new Blob([uint8Array], { type: 'audio/wav' });
+                audioFiles.push(outputAudioBlob);
+                if(currentTrack==0){
+                    playNextTrack();
+                }
+
+                // Set the audio element's source to the recorded audio
+                // audioPlayer.src = URL.createObjectURL(outputAudioBlob);
+            }
+        });
+        
+        // Create a new table row for the separator
+        var separatorRow = document.createElement("tr");
+
+        // Create separator cell
+        var separatorCell = document.createElement("td");
+        separatorCell.colSpan = 2; // Span across two columns
+        separatorCell.textContent = "------------------------------------------------------------------";
+        // Create separator cell
+        var separatorCell = document.createElement("td");
+        separatorCell.colSpan = 2; // Span across two columns
+        separatorCell.textContent = "------------------------------------------------------------------";
+
+        // Append the separator cell to the separator row
+        separatorRow.appendChild(separatorCell);
+
+        // Append the separator row to the table
+        table.appendChild(separatorRow);
+    };
+
+    // Event handler on socket close
+    socket.onclose = (event) => {
+        if (event.wasClean) {
+            console.log('Closed cleanly, code=${event.code}, reason=${event.reason}');
+            startButton.textContent = "Start";
+        } else {
+            console.error('Connection died');
+            startButton.textContent = "Start";
+        }
+    };
+
+    // Method to remove elements
+    function removeElements(){
+        prevLength = 0;
+        audioFiles = []; // initiate audio pipeline
+        currentTrack = 0; // also the audio serial
+        var rowCount = table.rows.length;
+        // Remove rows from bottom to top to avoid skipping rows
+        for (var i = rowCount - 1; i >= 0; i--) {
+            table.deleteRow(i);
+        }
+    }
+
+
+    // Event listener for start button
+    startButton.addEventListener('click', async () => {
+        if (startButton.textContent == "Start"){
+            isStreamingFailed = 0;
+            const socket = new WebSocket(websocketServerUrl);
+            removeElements();
+            doStreaming();
+            startButton.textContent = "Stop";
+        }else{
+            startButton.textContent = "Start";
+            isStreamingFailed = 6;
+        }
+
+    });
+  </script>
+</body>
+
+</html>
