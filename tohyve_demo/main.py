@@ -32,7 +32,7 @@ manager = ConnectionManager()
 # Endpoint to serve the HTML file
 @app.get("/tohyve-demo",response_class=HTMLResponse)
 async def get(request: Request):
-    return templates.TemplateResponse("sample.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 # Endpoint for the websocket
@@ -52,5 +52,5 @@ if __name__ == '__main__':
         uvicorn.run(
         "main:app",
         host    = "0.0.0.0",
-        port    = 8081
+        port    = 8005
     )

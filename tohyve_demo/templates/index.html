@@ -10,11 +10,13 @@
         .dropdown-container {
             display: flex;
             justify-content: space-between;
+            margin-top: 40px;
         }
 
         .dropdown {
             flex: 1;
-            margin-right: 10px;
+            margin-right: 20px;
+            margin-left: 10px;
         }
         .header {
             text-align: center;
@@ -30,7 +32,7 @@
                 <a class="nav-link active" data-toggle="tab" href="#uploadTab">File Upload</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#streamingTab">Audio Streaming</a>
+                <a class="nav-link" data-toggle="tab" href="#streamingTab">Website Streaming</a>
             </li>
         </ul>
 
@@ -104,15 +106,22 @@
             </div>
             <!-- Audio Streaming Tab -->
             <div class="tab-pane container fade" id="streamingTab">
-                <h3 class="mt-3">ToHyVe Demo: Start Audio Streaming by Selecting Language Codes</h3>
+                <!-- Audio Streaming Tab -->
+                <h3 class="mt-3">ToHyVe Demo: Start Demo by Giving Streaming URL and Selecting Language Codes</h3>
+
+                <div class="dropdown-container">
+                    <label for="streamingUrl">Streaming URL</label>
+                    <input type="text" class="form-control" id="streamingUrl" placeholder="Enter Streaming URL">
+                </div>
                 <div class="dropdown-container" style="margin-top: 20px;">
                     <!-- First Dropdown (Default: de) -->
-                    <label for="source_language">Streaming Language:</label>
+                    <label for="source_language">Streaming Language</label>
                     <select class="dropdown" id="source_language">
-                        <option value="en">English</option>
                         <option value="de" selected>German</option>
+                        <option value="en">English</option>
+                        
                     </select>
-                    <label for="target_language">Target Language:</label>
+                    <label for="target_language">Target Language</label>
                     <!-- Second Dropdown (Default: en) -->
                     <select class="dropdown" id="target_language">
                         <option value="en" selected>English</option>
@@ -121,8 +130,7 @@
                 </div>
                 <!-- Start, Pause Button -->
                 <div style="display: flex; justify-content: center; align-items: center;text-align: center;">
-                    <button class="btn btn-primary mt-3" id="startButton" style="margin-right: 10px;" >Start</button>
-                    <button class="btn btn-primary mt-3" id="pauseButton" >Pause</button>
+                    <button class="btn btn-primary mt-3" id="startButton">Start</button>
                 </div>
                 <!-- Display response from the website -->
                 <div id="streaming-response" style="margin-top: 20px;">
@@ -142,12 +150,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        // Flag to track streaming status
+        let isStreamingFailed = 0;
+        let audioFiles = [];
+        let currentTrack = 0;
+        let prevLength = 0;
         let mediaRecorder;
         let audioChunks = [];
         let isRecording = false;
         let base64data = '';
+        const audioPlayer = document.getElementById('audioPlayer');
+        const streamUrl = document.getElementById('streamingUrl');
+        const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws';
         const startButton = document.getElementById('startButton');
-        const pauseButton = document.getElementById('pauseButton');
         const responseDiv = document.getElementById('streaming-response');
         const sourceLanguage = document.getElementById("source_language");
         const targetLanguage = document.getElementById("target_language");
@@ -198,7 +213,7 @@
         }
         // method for file upload
         function convertToBase64() {
-            const socket = new WebSocket('wss://dfki-3109.dfki.de/ws');
+            const socket_1 = new WebSocket(websocketServerUrl);
             // var audioFile = document.getElementById('audioFile').files[0];
             if (audioFile) {
                 var fileSizeInMB = audioFile.size / (1024 * 1024); // Convert fileSize to MB
@@ -220,7 +235,7 @@
             }
 
             // Event handler for when the connection is opened
-            socket.onopen = function(event) {
+            socket_1.onopen = function(event) {
                 console.log("WebSocket Connection Opened");
                 // Format the data into a JSON object
                 const jsonData = {
@@ -238,7 +253,7 @@
                 console.log(jsonData);
                 
                 // Send data to the server
-                socket.send(JSON.stringify(jsonData));
+                socket_1.send(JSON.stringify(jsonData));
                 
                 // Show loading bar
                 $('#loadingModal').modal('show');
@@ -246,7 +261,7 @@
             };
 
             // Event handler for incoming messages
-            socket.onmessage = (event) => {
+            socket_1.onmessage = (event) => {
                 // Hide the loading bar
                 $('#loadingModal').modal('hide');
                 
@@ -281,28 +296,15 @@
                         filePlayer.src = URL.createObjectURL(outputAudioBlob);
                     }
                 });
-                // Create a new table row for the separator
-                var separatorRow = document.createElement("tr");
-
-                // Create separator cell
-                var separatorCell = document.createElement("td");
-                separatorCell.colSpan = 2; // Span across two columns
-                separatorCell.textContent = "---------------------------------------------------------------";
-
-                // Append the separator cell to the separator row
-                separatorRow.appendChild(separatorCell);
-
-                // Append the separator row to the table
-                table.appendChild(separatorRow);
             };
 
             // Event handler for errors
-            socket.onerror = function(event) {
+            socket_1.onerror = function(event) {
                 console.error("WebSocket Error:", event);
             };
 
             // Event handler for when the connection is closed
-            socket.onclose = function(event) {
+            socket_1.onclose = function(event) {
                 if (event.wasClean) {
                     console.log('Closed cleanly, code=${event.code}, reason=${event.reason}');
                 } else {
@@ -314,30 +316,143 @@
             };
         }
 
-        // Method for streaming audio
-        async function startStreaming() {
-            const socket = new WebSocket('wss://dfki-3109.dfki.de/ws');
+        
+        // Function to do web streaming
+        function doStreaming(){
+            // Connect to WebSocket
+            const socket = new WebSocket(websocketServerUrl);
+            // Event handler for socket connection
+            socket.onopen = function(event){
+                console.log('Connected to WebSocket server.');
+                // Call the fetchData function at regular intervals (every 10 seconds in this example)
+                setInterval( () => {
+                    if (isStreamingFailed<5){
+                        startStreaming(socket);
+                    }
+                }, 10000); // 10000 milliseconds = 10 seconds
+            };
+
+            // Event handler for socket incoming messages
+            socket.onmessage = (event) => {
+                // Parse the JSON response
+                var jsonResponse = JSON.parse(event.data);
+                var keys = Object.keys(jsonResponse);
+                // Iterate over the keys and log them
+                keys.forEach(function (key) {
+                    if (key == "asr"){
+                        var row = table.insertRow();
+                        console.log('key Response:', jsonResponse[key]);
+                        var asr_cell = row.insertCell(0);
+                        asr_cell.innerHTML = jsonResponse[key];
+                        var row = table.insertRow();
+                        var asr_cell = row.insertCell(0);
+                        asr_cell.innerHTML = "------------------------------------------------------------------";
+                    }
+                    if (key == "mt"){
+                        var row = table.insertRow();
+                        console.log('key Response:', jsonResponse[key]);
+                        var mt_cell = row.insertCell(0);
+                        mt_cell.innerHTML = jsonResponse[key];
+                        var row = table.insertRow();
+                        var mt_cell = row.insertCell(0);
+                        mt_cell.innerHTML = "------------------------------------------------------------------";
+                    }
+                    if (key == "tts"){
+                        var row = table.insertRow();
+                        console.log('key Response:', jsonResponse[key]);
+                        var tts_cell = row.insertCell(0);
+                        tts_cell.innerHTML = jsonResponse[key];
+                    }
+                    if (key == "audio"){
+                        const binaryAudioData = atob(jsonResponse["audio"]);
+                        // Create a Uint8Array from the binary data
+                        const uint8Array = new Uint8Array(binaryAudioData.length);
+                        for (let i = 0; i < binaryAudioData.length; i++) {
+                            uint8Array[i] = binaryAudioData.charCodeAt(i);
+                        }
+                        const outputAudioBlob = new Blob([uint8Array], { type: 'audio/wav' });
+                        audioFiles.push(outputAudioBlob);
+                        if(currentTrack==0){
+                            playNextTrack();
+                        }
+
+                    }
+                });
+                
+                // Create a new table row for the separator
+                var separatorRow = document.createElement("tr");
+
+                // Create separator cell
+                var separatorCell = document.createElement("td");
+                separatorCell.colSpan = 2; // Span across two columns
+                separatorCell.textContent = "------------------------------------------------------------------";
+                // Create separator cell
+                var separatorCell = document.createElement("td");
+                separatorCell.colSpan = 2; // Span across two columns
+                separatorCell.textContent = "------------------------------------------------------------------";
+
+                // Append the separator cell to the separator row
+                separatorRow.appendChild(separatorCell);
+
+                // Append the separator row to the table
+                table.appendChild(separatorRow);
+            };
+
+            // Event handler on socket close
+            socket.onclose = (event) => {
+                if (event.wasClean) {
+                    console.log('Closed cleanly, code=${event.code}, reason=${event.reason}');
+                    startButton.textContent = "Start";
+                } else {
+                    console.error('Connection died');
+                    startButton.textContent = "Start";
+                }
+            };
+        }
+        
+        // Function to convert ArrayBuffer to Base64
+        function arrayBufferToBase64( buffer ) {
+            var binary = '';
+            var bytes = new Uint8Array( buffer );
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode( bytes[ i ] );
+            }
+            return btoa( binary );
+        }
+
+        // Function to fetch audio data and return as ArrayBuffer
+        async function fetchAudioData(url) {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const response = await fetch(url);
+                if (response.status == 200){
+                    isStreamingFailed = 0;
+                    return await response.arrayBuffer();
+                } else{
+                    isStreamingFailed += 1;
+                    throw new Error("Streaming finished");
+                }
+            } catch (error) {
+                if (error.message === 'Streaming finished') {
+                    console.log('Inner Streaming finished. Stopping data fetching.');
+                } else {
+                    isStreamingFailed += 1;
+                    console.error('Error fetching audio data:', error);
+                }
+            }
+        }
 
-                mediaRecorder = new MediaRecorder(stream);
-
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
-                        audioChunks.push(event.data);
-                    }
-                };
-                // Media recorder on stop EventHandler
-                mediaRecorder.onstop = (event) => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    var reader = new FileReader();
-                    
-                    // Convert data to base64
-                    reader.onloadend = function() { 
-                        base64data = reader.result;       
-                    }
-                    reader.readAsDataURL(audioBlob);
-                    
+        // Function which starts streaming
+        async function startStreaming(socket) {
+            // Check if streaming is finished, stop fetching data if it is
+            if (isStreamingFailed > 5) {
+                console.log('Streaming is finished. Stopping data fetching.');
+                startButton.textContent = "Start";
+                return;
+            }
+            fetchAudioData(streamUrl.value)
+                .then(arrayBuffer => {
+                    base64data = "data:audio/wav;base64," + arrayBufferToBase64(arrayBuffer);
                     // Format the data into a JSON object
                     const jsonData = {
                         fn_index:4,
@@ -350,118 +465,61 @@
                         ],
                         target_language:targetLanguage.value
                     };
-
-                    // Send data to the server
-                    socket.send(JSON.stringify(jsonData));
-
-                    // Clear audioChunks for the next recording
-                    audioChunks = [];                
-
-                };
-
-                socket.onmessage = (event) => {
-                    // Parse the JSON response
-                    var jsonResponse = JSON.parse(event.data);
-
-                    var keys = Object.keys(jsonResponse);
-                    // Iterate over the keys and log them
-                    keys.forEach(function (key) {
-                        if (key == "asr"){
-                            var row = table.insertRow();
-                            console.log('key Response:', jsonResponse[key]);
-                            var asr_cell = row.insertCell(0);
-                            asr_cell.innerHTML = jsonResponse[key];
-                        }
-                        if (key == "mt"){
-                            var row = table.insertRow();
-                            console.log('key Response:', jsonResponse[key]);
-                            var mt_cell = row.insertCell(0);
-                            mt_cell.innerHTML = jsonResponse[key];
-                        }
-                        if (key == "tts"){
-                            var row = table.insertRow();
-                            console.log('key Response:', jsonResponse[key]);
-                            var tts_cell = row.insertCell(0);
-                            tts_cell.innerHTML = jsonResponse[key];
-                        }
-                        if (key == "audio"){
-                            const binaryAudioData = atob(jsonResponse["audio"]);
-                            // Create a Uint8Array from the binary data
-                            const uint8Array = new Uint8Array(binaryAudioData.length);
-                            for (let i = 0; i < binaryAudioData.length; i++) {
-                                uint8Array[i] = binaryAudioData.charCodeAt(i);
-                            }
-                            const outputAudioBlob = new Blob([uint8Array], { type: 'audio/wav' });
-                            // Set the audio element's source to the recorded audio
-                            audioPlayer.src = URL.createObjectURL(outputAudioBlob);
-                        }
-                    });
-                    // Create a new table row for the separator
-                    var separatorRow = document.createElement("tr");
-
-                    // Create separator cell
-                    var separatorCell = document.createElement("td");
-                    separatorCell.colSpan = 2; // Span across two columns
-                    separatorCell.textContent = "---------------------------------------------------------------";
-
-                    // Append the separator cell to the separator row
-                    separatorRow.appendChild(separatorCell);
-
-                    // Append the separator row to the table
-                    table.appendChild(separatorRow);
-                };
-
-                socket.onclose = (event) => {
-                    if (event.wasClean) {
-                        console.log('Closed cleanly, code=${event.code}, reason=${event.reason}');
-                    } else {
-                        console.error('Connection died');
+                    if (socket.readyState === WebSocket.OPEN) {
+                        // Send audio data as base64 to WebSocket server
+                        socket.send(JSON.stringify(jsonData));
                     }
-                };
-                
-                mediaRecorder.start();
-                isRecording = true;
-                
-                // Send audio every second
-                setInterval(() => {
-                    if (isRecording) {
-                        mediaRecorder.stop();
-                        mediaRecorder.start();
-                    }
-                }, 2000);
-
-            } catch (error) {
-                console.error('Error accessing the microphone:', error);
-            }
-
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    startButton.textContent = "Start";
+                });
         }
-        // event listener for start button
+
+        // Function with controls audio pipline
+        function playNextTrack() {
+            if (currentTrack < audioFiles.length) {
+                audioPlayer.src = URL.createObjectURL(audioFiles[currentTrack]);
+                // audioPlayer.play();
+                currentTrack++;
+                prevLength = audioFiles.length;
+            }
+        }
+
+        // Event handler when an audio ends
+        audioPlayer.addEventListener('ended', function() {
+            // Code to execute when audio playback ends
+            setInterval( () => {
+                if (prevLength < audioFiles.length){
+                    playNextTrack();
+                }
+            }, 7000); // 7000 milliseconds = 7 seconds
+        });
+
+        // Method to remove elements
+        function removeElements(){
+            prevLength = 0;
+            audioFiles = []; // initiate audio pipeline
+            currentTrack = 0; // also the audio serial
+            var rowCount = table.rows.length;
+            // Remove rows from bottom to top to avoid skipping rows
+            for (var i = rowCount - 1; i >= 0; i--) {
+                table.deleteRow(i);
+            }
+        }
+
+        // Event listener for start button
         startButton.addEventListener('click', async () => {
             if (startButton.textContent == "Start"){
+                isStreamingFailed = 0;
                 removeElements();
-                startStreaming();
+                doStreaming();
                 startButton.textContent = "Stop";
-                isRecording = true;
-                pauseButton.removeAttribute('disabled');
             }else{
                 startButton.textContent = "Start";
-                mediaRecorder.stop();
-                isRecording = false;
-                pauseButton.setAttribute('disabled', 'disabled');
+                isStreamingFailed = 6;
             }
 
-        });
-        // event listener for pause button
-        pauseButton.addEventListener('click', () => {
-            if (pauseButton.textContent == "Pause") {
-                mediaRecorder.pause();
-                pauseButton.textContent = "Resume";
-                isRecording = false;
-            } else {
-                isRecording = true;
-                mediaRecorder.resume();
-                pauseButton.textContent = "Pause";
-            }
         });
     </script>
 </body>

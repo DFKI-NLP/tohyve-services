@@ -89,14 +89,101 @@
     const targetLanguage = document.getElementById("target_language");
     var table = document.getElementById("streaming-response-table");
 
-    // Connect to WebSocket
-    const socket = new WebSocket(websocketServerUrl);
-    // Event handler for socket connection
-    socket.onopen = function(event){
-        console.log('Connected to WebSocket server.');
-    };
-    // Create a CancelToken source
-    // const { cancel, token } = axios.CancelToken.source();
+
+    // Function to do streaing
+    function doStreaming(){
+        // Connect to WebSocket
+        const socket = new WebSocket(websocketServerUrl);
+        // Event handler for socket connection
+        socket.onopen = function(event){
+            console.log('Connected to WebSocket server.');
+            // Call the fetchData function at regular intervals (every 10 seconds in this example)
+            setInterval( () => {
+                if (isStreamingFailed<5){
+                    startStreaming(socket);
+                }
+            }, 10000); // 10000 milliseconds = 10 seconds
+        };
+
+        // Event handler for socket incoming messages
+        socket.onmessage = (event) => {
+            // Parse the JSON response
+            var jsonResponse = JSON.parse(event.data);
+            var keys = Object.keys(jsonResponse);
+            // Iterate over the keys and log them
+            keys.forEach(function (key) {
+                if (key == "asr"){
+                    var row = table.insertRow();
+                    console.log('key Response:', jsonResponse[key]);
+                    var asr_cell = row.insertCell(0);
+                    asr_cell.innerHTML = jsonResponse[key];
+                    var row = table.insertRow();
+                    var asr_cell = row.insertCell(0);
+                    asr_cell.innerHTML = "------------------------------------------------------------------";
+                }
+                if (key == "mt"){
+                    var row = table.insertRow();
+                    console.log('key Response:', jsonResponse[key]);
+                    var mt_cell = row.insertCell(0);
+                    mt_cell.innerHTML = jsonResponse[key];
+                    var row = table.insertRow();
+                    var mt_cell = row.insertCell(0);
+                    mt_cell.innerHTML = "------------------------------------------------------------------";
+                }
+                if (key == "tts"){
+                    var row = table.insertRow();
+                    console.log('key Response:', jsonResponse[key]);
+                    var tts_cell = row.insertCell(0);
+                    tts_cell.innerHTML = jsonResponse[key];
+                }
+                if (key == "audio"){
+                    const binaryAudioData = atob(jsonResponse["audio"]);
+                    // Create a Uint8Array from the binary data
+                    const uint8Array = new Uint8Array(binaryAudioData.length);
+                    for (let i = 0; i < binaryAudioData.length; i++) {
+                        uint8Array[i] = binaryAudioData.charCodeAt(i);
+                    }
+                    const outputAudioBlob = new Blob([uint8Array], { type: 'audio/wav' });
+                    audioFiles.push(outputAudioBlob);
+                    if(currentTrack==0){
+                        playNextTrack();
+                    }
+
+                    // Set the audio element's source to the recorded audio
+                    // audioPlayer.src = URL.createObjectURL(outputAudioBlob);
+                }
+            });
+            
+            // Create a new table row for the separator
+            var separatorRow = document.createElement("tr");
+
+            // Create separator cell
+            var separatorCell = document.createElement("td");
+            separatorCell.colSpan = 2; // Span across two columns
+            separatorCell.textContent = "------------------------------------------------------------------";
+            // Create separator cell
+            var separatorCell = document.createElement("td");
+            separatorCell.colSpan = 2; // Span across two columns
+            separatorCell.textContent = "------------------------------------------------------------------";
+
+            // Append the separator cell to the separator row
+            separatorRow.appendChild(separatorCell);
+
+            // Append the separator row to the table
+            table.appendChild(separatorRow);
+        };
+
+        // Event handler on socket close
+        socket.onclose = (event) => {
+            if (event.wasClean) {
+                console.log('Closed cleanly, code=${event.code}, reason=${event.reason}');
+                startButton.textContent = "Start";
+            } else {
+                console.error('Connection died');
+                startButton.textContent = "Start";
+            }
+        };
+    }
     
     // Function to convert ArrayBuffer to Base64
     function arrayBufferToBase64( buffer ) {
@@ -137,7 +224,7 @@
     }
 
     // Function which starts streaming
-    async function startStreaming() {
+    async function startStreaming(socket) {
         // Check if streaming is finished, stop fetching data if it is
         if (isStreamingFailed > 5) {
             console.log('Streaming is finished. Stopping data fetching.');
@@ -170,16 +257,6 @@
             });
     }
 
-    // Function to do streaing
-    function doStreaming(){
-        // Call the fetchData function at regular intervals (every 5 seconds in this example)
-        setInterval( () => {
-            if (isStreamingFailed<5){
-                startStreaming();
-            }
-        }, 10000); // 5000 milliseconds = 5 seconds
-    }
-
     // Function with controls audio pipline
     function playNextTrack() {
         if (currentTrack < audioFiles.length) {
@@ -190,94 +267,15 @@
         }
     }
 
+    // Event handler when an audio ends
     audioPlayer.addEventListener('ended', function() {
         // Code to execute when audio playback ends
         setInterval( () => {
             if (prevLength < audioFiles.length){
                 playNextTrack();
             }
-        }, 7000); // 5000 milliseconds = 5 seconds
+        }, 7000); // 7000 milliseconds = 7 seconds
     });
-
-
-    // Event handler for socket incoming messages
-    socket.onmessage = (event) => {
-        // Parse the JSON response
-        var jsonResponse = JSON.parse(event.data);
-        var keys = Object.keys(jsonResponse);
-        // Iterate over the keys and log them
-        keys.forEach(function (key) {
-            if (key == "asr"){
-                var row = table.insertRow();
-                console.log('key Response:', jsonResponse[key]);
-                var asr_cell = row.insertCell(0);
-                asr_cell.innerHTML = jsonResponse[key];
-                var row = table.insertRow();
-                var asr_cell = row.insertCell(0);
-                asr_cell.innerHTML = "------------------------------------------------------------------";
-            }
-            if (key == "mt"){
-                var row = table.insertRow();
-                console.log('key Response:', jsonResponse[key]);
-                var mt_cell = row.insertCell(0);
-                mt_cell.innerHTML = jsonResponse[key];
-                var row = table.insertRow();
-                var mt_cell = row.insertCell(0);
-                mt_cell.innerHTML = "------------------------------------------------------------------";
-            }
-            if (key == "tts"){
-                var row = table.insertRow();
-                console.log('key Response:', jsonResponse[key]);
-                var tts_cell = row.insertCell(0);
-                tts_cell.innerHTML = jsonResponse[key];
-            }
-            if (key == "audio"){
-                const binaryAudioData = atob(jsonResponse["audio"]);
-                // Create a Uint8Array from the binary data
-                const uint8Array = new Uint8Array(binaryAudioData.length);
-                for (let i = 0; i < binaryAudioData.length; i++) {
-                    uint8Array[i] = binaryAudioData.charCodeAt(i);
-                }
-                const outputAudioBlob = new Blob([uint8Array], { type: 'audio/wav' });
-                audioFiles.push(outputAudioBlob);
-                if(currentTrack==0){
-                    playNextTrack();
-                }
-
-                // Set the audio element's source to the recorded audio
-                // audioPlayer.src = URL.createObjectURL(outputAudioBlob);
-            }
-        });
-        
-        // Create a new table row for the separator
-        var separatorRow = document.createElement("tr");
-
-        // Create separator cell
-        var separatorCell = document.createElement("td");
-        separatorCell.colSpan = 2; // Span across two columns
-        separatorCell.textContent = "------------------------------------------------------------------";
-        // Create separator cell
-        var separatorCell = document.createElement("td");
-        separatorCell.colSpan = 2; // Span across two columns
-        separatorCell.textContent = "------------------------------------------------------------------";
-
-        // Append the separator cell to the separator row
-        separatorRow.appendChild(separatorCell);
-
-        // Append the separator row to the table
-        table.appendChild(separatorRow);
-    };
-
-    // Event handler on socket close
-    socket.onclose = (event) => {
-        if (event.wasClean) {
-            console.log('Closed cleanly, code=${event.code}, reason=${event.reason}');
-            startButton.textContent = "Start";
-        } else {
-            console.error('Connection died');
-            startButton.textContent = "Start";
-        }
-    };
 
     // Method to remove elements
     function removeElements(){
@@ -291,12 +289,10 @@
         }
     }
 
-
     // Event listener for start button
     startButton.addEventListener('click', async () => {
         if (startButton.textContent == "Start"){
             isStreamingFailed = 0;
-            const socket = new WebSocket(websocketServerUrl);
             removeElements();
             doStreaming();
             startButton.textContent = "Stop";
