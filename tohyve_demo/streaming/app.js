@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const cors = require('cors');
 const socketIo = require('socket.io');
 const fluentFfmpeg = require('fluent-ffmpeg');
 
@@ -7,31 +8,51 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
 
-const port = process.env.PORT || 3000;
+const corsOptions = {
+  origin: '*',
+  exposedHeaders: ['Content-Length', 'Authorization'],
+  methods: 'GET,PUT,POST,DELETE',
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
+const port = process.env.PORT || 8080;
 
 server.listen(port, () => {
   console.log('Server is running on http://localhost:${port}');
 });
 
-const audioFilePath = 'audio.mp3';
+ // Add more audio files as needed
+const audioFilePaths = [];
+for(let i = 1; i<11; i++){
+  audioFilePaths.push("/usr/src/app/audios/audio_"+i+".mp3");
+}
+
+let currentAudioIndex = 0;
 
 // Serve the audio stream
 app.get('/stream', (req, res) => {
-    const ffmpegCommand = fluentFfmpeg(audioFilePath)
-        .format('mp3')
-        .on('error', (err) => {
-            console.error('FFmpeg error:', err);
-          })
-        .on('end', () => {
-        console.log('Streaming finished');
+  const currentAudioFilePath = audioFilePaths[currentAudioIndex];
+
+  const ffmpegCommand = fluentFfmpeg(currentAudioFilePath)
+      .format('mp3')
+      .on('error', (err) => {
+          console.error('FFmpeg error:', err);
         })
-        .on('close', (code, signal) => {
-            console.log(`FFmpeg process closed with code ${code} and signal ${signal}`);
-        })
-        .pipe(res, { end: true });
+      .on('end', () => {
+      console.log('Streaming finished');
+      })
+      .on('close', (code, signal) => {
+          console.log(`FFmpeg process closed with code ${code} and signal ${signal}`);
+      })
+      .pipe(res, { end: true });
+
+    currentAudioIndex = (currentAudioIndex + 1) % audioFilePaths.length; // Cycle through audio files
+    if(currentAudioIndex > 9){
+      currentAudioIndex = 0;
+    }
 });
 
 // Broadcast the audio stream to connected clients
@@ -39,6 +60,7 @@ io.on('connection', (socket) => {
     console.log('Client connected');
     socket.on('disconnect', () => {
         console.log('Client disconnected');
+        // You may add additional handling when a client disconnects
         if (ffmpegProcess) {
             ffmpegProcess.kill(); // Stop the FFmpeg process on client disconnect
         }
