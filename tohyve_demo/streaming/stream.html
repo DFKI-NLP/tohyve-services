@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Audio Streaming</title>
+</head>
+<body>
+
+<audio controls autoplay>
+  <source src="" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const audioElement = document.querySelector('audio');
+  const mediaSource = new MediaSource();
+  let mediaSourceBuffer;
+
+  // Event listener for when the MediaSource is open
+  mediaSource.addEventListener('sourceopen', function () {
+    mediaSourceBuffer = mediaSource.addSourceBuffer('audio/mp3; codecs="mp4a.40.2"');
+  });
+
+  // Set the MediaSource as the source of the audio element
+  audioElement.src = URL.createObjectURL(mediaSource);
+
+  // Replace the stream URL with your live audio stream URL
+  const liveAudioStreamURL = 'https://dfki-3109.dfki.de/stream';
+
+  // Fetch the live audio stream and append it to the MediaSourceBuffer
+  fetch(liveAudioStreamURL)
+    .then(response => response.body)
+    .then(body => {
+      const reader = body.getReader();
+
+      function pump() {
+        return reader.read().then(({ done, value }) => {
+          if (done) {
+            mediaSource.endOfStream();
+          } else {
+            mediaSourceBuffer.appendBuffer(value);
+            return pump();
+          }
+        });
+      }
+
+      pump();
+    })
+    .catch(error => {
+      console.error('Error fetching live audio stream:', error);
+    });
+});
+</script>
+
+</body>
+</html>
