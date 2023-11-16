@@ -1,12 +1,19 @@
 import uvicorn
+import logging
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
+from websockets.exceptions import ConnectionClosedError
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 # from fastapi.responses import FileResponse
 # # from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from websocket_ import ConnectionManager
+
+
+# Set up logging configuration
+# logging.basicConfig(level=logging.INFO)  # Adjust the level as needed
+
 
 app = FastAPI()
 
@@ -29,10 +36,11 @@ templates = Jinja2Templates(directory="templates")
 
 manager = ConnectionManager()
 
+
 # Endpoint to serve the HTML file
 @app.get("/tohyve-demo",response_class=HTMLResponse)
 async def get(request: Request):
-    return templates.TemplateResponse("sample.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 # Endpoint for the websocket
@@ -44,14 +52,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             json_data = await websocket.receive_text()
             asr_response, asr_succ, src, trg = await manager.get_asr(json_data)
-            
-            # if asr_succ == False and len(collected_messages) > 0:
-            #     asr_responses = " ".join(collected_messages)
-            #     await manager.send_personal_message(websocket, asr_responses, asr_succ, src, trg)
-            #     collected_messages = []
-            # elif asr_succ == False and len(collected_messages) == 0:
-            #     await manager.send_personal_message(websocket, asr_response, asr_succ, src, trg)
-            #     collected_messages = []
+
             if await manager.is_full_text(asr_response) and len(collected_messages)>0:
                 collected_messages.append(asr_response)
                 asr_responses = " ".join(collected_messages)
@@ -63,8 +64,16 @@ async def websocket_endpoint(websocket: WebSocket):
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+    
+    except ConnectionClosedError as e:
+        if e.code == 1011:
+            # Handle the specific error code 1011 (unexpected error)
+            print(f"ConnectionClosedError: {e}")
+            # Your custom handling logic here
 
-
+    except Exception as e:
+        # Handle other exceptions
+        print(f"Unexpected error: {e}")
 
 
 # Start the WebSocket server in a separate thread

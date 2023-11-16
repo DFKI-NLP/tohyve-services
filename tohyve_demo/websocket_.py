@@ -5,10 +5,10 @@ import traceback
 import sys
 import base64
 
-from fastapi import WebSocket
+# from fastapi import WebSocket
 
 
-# format data for machine translation
+# Format data for machine translation
 def get_mt_formatted_data(asr_text, source_language, target_language):
     body = {
         "data": [
@@ -20,7 +20,7 @@ def get_mt_formatted_data(asr_text, source_language, target_language):
     return body
 
 
-# format data for text to speech
+# Format data for text to speech
 def get_tts_formatted_data(mt_text, target_language):
     # Split the string into words using space as delimiter
     words = mt_text.split()
@@ -40,15 +40,15 @@ def get_tts_formatted_data(mt_text, target_language):
 class ConnectionManager:
     # initialization method
     def __init__(self):
-        self.active_connections: list[WebSocket] = []
+        self.active_connections = []
    
     # method to connect with websocket
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket):
         await websocket.accept()
         self.active_connections.append(websocket)
    
     # method to disconnect with websocket
-    def disconnect(self, websocket: WebSocket):
+    def disconnect(self, websocket):
         self.active_connections.remove(websocket)
 
     # method to perform asr
@@ -74,27 +74,26 @@ class ConnectionManager:
                 raise Exception
         except Exception as e:
             asr_response_text = "ASR REQUEST ERROR"
-
-        await asr_response_text, asr_success, source_language, target_language
+        return asr_response_text, asr_success, source_language, target_language
 
     # method to identify ending of a string. 
     async def is_full_text(self, input_str):
         if input_str.endswith('.'):
             # Check if the input ends with a full stop and contains more than one word
-            await input_str.endswith('.') and len(input_str.split()) > 1
+            return input_str.endswith('.') and len(input_str.split()) > 1
         
         elif input_str.endswith('?'):
             # Check if the input ends with a question mark and contains more than one word
-            await input_str.endswith('?') and len(input_str.split()) > 1
+            return input_str.endswith('?') and len(input_str.split()) > 1
         
         elif input_str.endswith('!'):
             # Check if the input ends with a exclamatory mark and contains more than one word
-            await input_str.endswith('.') and len(input_str.split()) > 1
+            return input_str.endswith('.') and len(input_str.split()) > 1
         else:
-            await False
+            return False
 
     # method to perform rest of the pipeline and send response to the client
-    async def send_personal_message(self, websocket: WebSocket, asr_response_text, asr_success: bool, source_language, target_language):
+    async def send_personal_message(self, websocket, asr_response_text, asr_success: bool, source_language, target_language):
         mt_success = False
         mt_response_text = ""
         tts_response_text = "Unsuccessful !!"
@@ -147,14 +146,14 @@ class ConnectionManager:
             tts_response_text = "TTS REQUEST ERROR !!\n"+str(traceback.print_exception(*sys.exc_info()))
 
         if tts_response_text == "Successful !!":
-            pipeline_response ={
+            pipeline_response = {
                 "asr": str("ASR: "+asr_response_text), 
                 "mt": str("MT: "+mt_response_text),
                 "tts": str("TTS: "+tts_response_text+"\n"),
                 "audio": tts_audio
             }
         else:
-            pipeline_response ={
+            pipeline_response = {
                 "asr": str("ASR: "+asr_response_text), 
                 "mt": str("MT: "+mt_response_text),
                 "tts": str("TTS: "+tts_response_text+"\n")

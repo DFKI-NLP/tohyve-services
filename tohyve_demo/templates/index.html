@@ -151,17 +151,17 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // Flag to track streaming status
-        let isStreamingFailed = 0;
-        let audioFiles = [];
+        let stopFetching = false;
         let currentTrack = 0;
         let prevLength = 0;
         let mediaRecorder;
         let audioChunks = [];
         let isRecording = false;
         let base64data = '';
+        let audioFiles = [];
         const audioPlayer = document.getElementById('audioPlayer');
         const streamUrl = document.getElementById('streamingUrl');
-        const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws';
+        const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws'; // this can be replaced by with your websocket address
         const startButton = document.getElementById('startButton');
         const responseDiv = document.getElementById('streaming-response');
         const sourceLanguage = document.getElementById("source_language");
@@ -169,6 +169,30 @@
         var table = document.getElementById("streaming-response-table");
         var fileAudioElement = document.getElementById("filePlayer");
         var audioFile = '';
+
+        class UnlimitedFIFO {
+            constructor() {
+                this.queue = [];
+            }   
+
+            enqueue(item) {
+                this.queue.push(item);
+            }
+
+            dequeue() {
+                return this.queue.shift();
+            }
+
+            size() {
+                return this.queue.length;
+            }
+
+            isEmpty() {
+                    return this.queue.length === 0;
+            }   
+        }
+
+
         // EventListener for the Progressbar
         document.getElementById('audioFile').addEventListener('change', function(event) {
             audioFile = document.getElementById('audioFile').files[0];
@@ -211,6 +235,7 @@
                 table.deleteRow(i);
             }
         }
+
         // method for file upload
         function convertToBase64() {
             const socket_1 = new WebSocket(websocketServerUrl);
@@ -323,13 +348,10 @@
             const socket = new WebSocket(websocketServerUrl);
             // Event handler for socket connection
             socket.onopen = function(event){
-                console.log('Connected to WebSocket server.');
-                // Call the fetchData function at regular intervals (every 10 seconds in this example)
-                setInterval( () => {
-                    if (isStreamingFailed<5){
-                        startStreaming(socket);
-                    }
-                }, 10000); // 10000 milliseconds = 10 seconds
+                console.log('WebSocket opened:', event);
+                if(!stopFetching){
+                    fetchAudioData(streamUrl.value, socket);
+                }
             };
 
             // Event handler for socket incoming messages
@@ -371,11 +393,10 @@
                             uint8Array[i] = binaryAudioData.charCodeAt(i);
                         }
                         const outputAudioBlob = new Blob([uint8Array], { type: 'audio/wav' });
-                        audioFiles.push(outputAudioBlob);
-                        if(currentTrack==0){
+                        audioFiles.enqueue(outputAudioBlob);
+                        if (audioPlayer.paused) {
                             playNextTrack();
                         }
-
                     }
                 });
                 
@@ -411,96 +432,105 @@
         }
         
         // Function to convert ArrayBuffer to Base64
-        function arrayBufferToBase64( buffer ) {
+        function arrayBufferToBase64(buffer) {
             var binary = '';
-            var bytes = new Uint8Array( buffer );
-            var len = bytes.byteLength;
+            // var bytes = new Uint8Array( buffer );
+            var len = buffer.byteLength;
             for (var i = 0; i < len; i++) {
-                binary += String.fromCharCode( bytes[ i ] );
+                binary += String.fromCharCode( buffer[ i ] );
             }
             return btoa( binary );
         }
 
         // Function to fetch audio data and return as ArrayBuffer
-        async function fetchAudioData(url) {
+        async function fetchAudioData(url, socket) {
             try {
-                const response = await fetch(url);
-                if (response.status == 200){
-                    isStreamingFailed = 0;
-                    return await response.arrayBuffer();
-                } else{
-                    isStreamingFailed += 1;
-                    throw new Error("Streaming finished");
+                const response = await fetch(url, { method: 'GET' });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch audio: ${response.status} ${response.statusText}`);
                 }
+
+                const reader = response.body.getReader();
+
+                while (!stopFetching) {
+                    const { value, done } = await reader.read();
+
+                    if (done) {
+                        console.log('Streaming finished.');
+                        break;
+                    }
+                    // Send the audio chunk to the WebSocket
+                    sendAudioToWebSocket(value, socket);
+                }
+
             } catch (error) {
-                if (error.message === 'Streaming finished') {
-                    console.log('Inner Streaming finished. Stopping data fetching.');
-                } else {
-                    isStreamingFailed += 1;
-                    console.error('Error fetching audio data:', error);
-                }
+                console.error('Error fetching audio:', error);
+                startButton.textContent = "Start"
+            }
+            if (socket) {
+                socket.close();
             }
         }
-
-        // Function which starts streaming
-        async function startStreaming(socket) {
-            // Check if streaming is finished, stop fetching data if it is
-            if (isStreamingFailed > 5) {
-                console.log('Streaming is finished. Stopping data fetching.');
-                startButton.textContent = "Start";
-                return;
+        
+        // Function to convert ArrayBuffer to Base64
+        function arrayBufferToBase64(buffer) {
+            if (buffer instanceof ArrayBuffer) {
+                var binary = '';
+                var bytes = new Uint8Array(buffer);
+                var len = bytes.byteLength;
+                for (var i = 0; i < len; i++) {
+                    binary += String.fromCharCode( bytes[ i ] );
+                }
+                return btoa(binary);
             }
-            fetchAudioData(streamUrl.value)
-                .then(arrayBuffer => {
-                    base64data = "data:audio/wav;base64," + arrayBufferToBase64(arrayBuffer);
-                    // Format the data into a JSON object
-                    const jsonData = {
-                        fn_index:4,
-                        data:[
-                            sourceLanguage.value,
-                            {
-                                data:base64data,
-                                name:"audio.mp3"
-                            }
-                        ],
-                        target_language:targetLanguage.value
-                    };
-                    if (socket.readyState === WebSocket.OPEN) {
-                        // Send audio data as base64 to WebSocket server
-                        socket.send(JSON.stringify(jsonData));
+            else{
+                var binary = '';
+                var len = buffer.byteLength;
+                for (var i = 0; i < len; i++) {
+                    binary += String.fromCharCode(buffer[ i ]);
+                }
+                return btoa(binary);
+            }
+
+        }
+
+        // Function which sends streaming to the server
+        function sendAudioToWebSocket(audioChunk, socket) {
+            base64data = "data:audio/wav;base64," + arrayBufferToBase64(audioChunk);
+            // Format the data into a JSON object
+            const jsonData = {
+                fn_index:4,
+                data:[
+                    sourceLanguage.value,
+                    {
+                        data:base64data,
+                        name:"audio.mp3"
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    startButton.textContent = "Start";
-                });
+                ],
+                target_language:targetLanguage.value
+            };
+
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(jsonData));
+            }
         }
 
         // Function with controls audio pipline
-        function playNextTrack() {
-            if (currentTrack < audioFiles.length) {
-                audioPlayer.src = URL.createObjectURL(audioFiles[currentTrack]);
-                // audioPlayer.play();
-                currentTrack++;
-                prevLength = audioFiles.length;
+        async function playNextTrack() {
+            if (!audioFiles.isEmpty()) {
+                audioPlayer.src = URL.createObjectURL(audioFiles.dequeue());
             }
         }
 
         // Event handler when an audio ends
         audioPlayer.addEventListener('ended', function() {
-            // Code to execute when audio playback ends
-            setInterval( () => {
-                if (prevLength < audioFiles.length){
-                    playNextTrack();
-                }
-            }, 7000); // 7000 milliseconds = 7 seconds
+            playNextTrack();
         });
 
         // Method to remove elements
         function removeElements(){
-            prevLength = 0;
-            audioFiles = []; // initiate audio pipeline
-            currentTrack = 0; // also the audio serial
+            audioFiles = new UnlimitedFIFO(); // initiate audio pipeline
             var rowCount = table.rows.length;
             // Remove rows from bottom to top to avoid skipping rows
             for (var i = rowCount - 1; i >= 0; i--) {
@@ -511,13 +541,13 @@
         // Event listener for start button
         startButton.addEventListener('click', async () => {
             if (startButton.textContent == "Start"){
-                isStreamingFailed = 0;
+                stopFetching = false;
                 removeElements();
                 doStreaming();
                 startButton.textContent = "Stop";
             }else{
                 startButton.textContent = "Start";
-                isStreamingFailed = 6;
+                stopFetching = true;
             }
 
         });
