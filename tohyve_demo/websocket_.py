@@ -38,33 +38,29 @@ def get_tts_formatted_data(mt_text, target_language):
 
 
 class ConnectionManager:
+    # initialization method
     def __init__(self):
         self.active_connections: list[WebSocket] = []
-
+   
+    # method to connect with websocket
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
-
+   
+    # method to disconnect with websocket
     def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
 
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        json_data = json.loads(message)
+    # method to perform asr
+    async def get_asr(self, message: str):
         asr_success = False
-        mt_success = False
+        json_data = json.loads(message)
+        asr_url = "https://dfki-3109.dfki.de/asr/run/predict"
         source_language = json_data["data"][0]
         target_language = json_data["target_language"]
         json_data.pop('target_language', None)
-        asr_response_text = ""
-        mt_response_text = ""
-        tts_response_text = "Unsuccessful !!"
-        tts_audio =""
         headers = {"Content-Type": "application/json"}
-        asr_url = "https://dfki-3109.dfki.de/asr/run/predict"
-        mt_url = "https://dfki-3109.dfki.de/mt/run/predict"
-        tts_url = "https://dfki-3109.dfki.de/tts/run/predict"
-        tts_get_audio_url = "https://dfki-3109.dfki.de/tts/file="
-        
+        asr_response_text = ""
         try:
             asr_response = requests.post(asr_url, json=json_data, headers=headers)
             asr_response_text = json.loads(asr_response.text)
@@ -77,8 +73,37 @@ class ConnectionManager:
                 asr_success = False
                 raise Exception
         except Exception as e:
-            asr_response_text = "ASR REQUEST ERROR !!\n"+str(traceback.print_exception(*sys.exc_info()))
+            asr_response_text = "ASR REQUEST ERROR"
 
+        await asr_response_text, asr_success, source_language, target_language
+
+    # method to identify ending of a string. 
+    async def is_full_text(self, input_str):
+        if input_str.endswith('.'):
+            # Check if the input ends with a full stop and contains more than one word
+            await input_str.endswith('.') and len(input_str.split()) > 1
+        
+        elif input_str.endswith('?'):
+            # Check if the input ends with a question mark and contains more than one word
+            await input_str.endswith('?') and len(input_str.split()) > 1
+        
+        elif input_str.endswith('!'):
+            # Check if the input ends with a exclamatory mark and contains more than one word
+            await input_str.endswith('.') and len(input_str.split()) > 1
+        else:
+            await False
+
+    # method to perform rest of the pipeline and send response to the client
+    async def send_personal_message(self, websocket: WebSocket, asr_response_text, asr_success: bool, source_language, target_language):
+        mt_success = False
+        mt_response_text = ""
+        tts_response_text = "Unsuccessful !!"
+        tts_audio =""
+        headers = {"Content-Type": "application/json"}
+        
+        mt_url = "https://dfki-3109.dfki.de/mt/run/predict"
+        tts_url = "https://dfki-3109.dfki.de/tts/run/predict"
+        tts_get_audio_url = "https://dfki-3109.dfki.de/tts/file="
         
         try:
             if asr_success and asr_response_text:
@@ -135,3 +160,6 @@ class ConnectionManager:
                 "tts": str("TTS: "+tts_response_text+"\n")
             }
         await websocket.send_text(json.dumps(pipeline_response))
+
+
+

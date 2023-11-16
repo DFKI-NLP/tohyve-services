@@ -32,19 +32,39 @@ manager = ConnectionManager()
 # Endpoint to serve the HTML file
 @app.get("/tohyve-demo",response_class=HTMLResponse)
 async def get(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("sample.html", {"request": request})
 
 
 # Endpoint for the websocket
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
+    collected_messages = []
     try:
         while True:
             json_data = await websocket.receive_text()
-            await manager.send_personal_message(json_data, websocket)  
+            asr_response, asr_succ, src, trg = await manager.get_asr(json_data)
+            
+            # if asr_succ == False and len(collected_messages) > 0:
+            #     asr_responses = " ".join(collected_messages)
+            #     await manager.send_personal_message(websocket, asr_responses, asr_succ, src, trg)
+            #     collected_messages = []
+            # elif asr_succ == False and len(collected_messages) == 0:
+            #     await manager.send_personal_message(websocket, asr_response, asr_succ, src, trg)
+            #     collected_messages = []
+            if await manager.is_full_text(asr_response) and len(collected_messages)>0:
+                collected_messages.append(asr_response)
+                asr_responses = " ".join(collected_messages)
+                collected_messages = []
+                await manager.send_personal_message(websocket, asr_responses, asr_succ, src, trg)
+                
+            else:
+                collected_messages.append(asr_response)
+
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+
+
 
 
 # Start the WebSocket server in a separate thread
@@ -54,3 +74,7 @@ if __name__ == '__main__':
         host    = "0.0.0.0",
         port    = 8005
     )
+        
+
+
+# https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3?aggregator=web
