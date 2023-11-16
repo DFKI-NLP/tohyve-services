@@ -58,6 +58,7 @@ class ConnectionManager:
         asr_url = "https://dfki-3109.dfki.de/asr/run/predict"
         source_language = json_data["data"][0]
         target_language = json_data["target_language"]
+        file_upload = bool(json_data["file_upload"])
         json_data.pop('target_language', None)
         headers = {"Content-Type": "application/json"}
         asr_response_text = ""
@@ -74,7 +75,7 @@ class ConnectionManager:
                 raise Exception
         except Exception as e:
             asr_response_text = "ASR REQUEST ERROR"
-        return asr_response_text, asr_success, source_language, target_language
+        return asr_response_text, asr_success, source_language, target_language, file_upload
 
     # method to identify ending of a string. 
     async def is_full_text(self, input_str):

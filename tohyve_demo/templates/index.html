@@ -162,6 +162,7 @@
         const audioPlayer = document.getElementById('audioPlayer');
         const streamUrl = document.getElementById('streamingUrl');
         const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws'; // this can be replaced by with your websocket address
+        // const websocketServerUrl = 'ws://localhost:8005/ws';
         const startButton = document.getElementById('startButton');
         const responseDiv = document.getElementById('streaming-response');
         const sourceLanguage = document.getElementById("source_language");
@@ -272,7 +273,8 @@
                             name:"audio.mp3"
                         }
                     ],
-                    target_language:targetLanguage.value
+                    target_language:targetLanguage.value,
+                    file_upload:1
                 };
                 // console sending data
                 console.log(jsonData);
@@ -508,7 +510,8 @@
                         name:"audio.mp3"
                     }
                 ],
-                target_language:targetLanguage.value
+                target_language:targetLanguage.value,
+                file_upload:0
             };
 
             if (socket.readyState === WebSocket.OPEN) {

@@ -51,9 +51,9 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             json_data = await websocket.receive_text()
-            asr_response, asr_succ, src, trg = await manager.get_asr(json_data)
+            asr_response, asr_succ, src, trg, file_upload = await manager.get_asr(json_data)
 
-            if await manager.is_full_text(asr_response) and len(collected_messages)>0:
+            if (await manager.is_full_text(asr_response) and len(collected_messages)>0) or file_upload:
                 collected_messages.append(asr_response)
                 asr_responses = " ".join(collected_messages)
                 collected_messages = []
