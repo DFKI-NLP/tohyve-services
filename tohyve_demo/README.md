@@ -2,7 +2,10 @@
 
 ## Description
 
-ToHyVe Demo: Service Demonstration is a powerful tool that showcases the integration of Automatic Speech Recognition (ASR), Machine Translation (MT), and Text-to-Speech (TTS) services. The tool consists of two tabs: "File Upload" and "Website Streaming."
+ToHyVe Demo: Service Demonstration  showcases the integration of Automatic Speech Recognition (ASR), Machine Translation (MT), and Text-to-Speech (TTS) into one use-case. 
+The front-end consists of two tabs: "File Upload" and "Website Streaming."
+The demo is available [here](https://dfki-3109.dfki.de/tohyve-demo/).
+Additionally, the service provides an API for programmatic use. 
 
 ### File Upload Tab
 
