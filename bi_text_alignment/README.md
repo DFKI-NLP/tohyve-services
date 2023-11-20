@@ -1,6 +1,7 @@
 # Bitext Alignment
-Bitext alignment is a tool to find aligned words between two different language sentences. We used [***simalign***](https://github.com/cisnlp/simalign), Which first used in [***SimAlign: High Quality Word Alignments Without Parallel Training Data Using Static and Contextualized Embeddings***](https://aclanthology.org/2020.findings-emnlp.147.pdf) paper. Specially we want to find alignment between **Japanese** and **German** sentences or between **Japanese** and **French** sentences. Simalign takes tokenized sentence list as input. So for Japanese sentence tokenization we used [***fugashi***](https://pypi.org/project/fugashi/) tokenizer, which first used in this [paper](https://aclanthology.org/2020.nlposs-1.7.pdf). For all other languages we used normal [**NLTK**](https://www.nltk.org/api/nltk.tokenize.html) tokenizer.
-## Installing Using Docker:
+Bitext alignment is a tool to find aligned words between two different language sentences. We used [***simalign***](https://github.com/cisnlp/simalign), Which was published in [***SimAlign: High Quality Word Alignments Without Parallel Training Data Using Static and Contextualized Embeddings***](https://aclanthology.org/2020.findings-emnlp.147.pdf). For Japanase sentence tokenization we use the [***fugashi***](https://pypi.org/project/fugashi/) tokenizer, which published [here](https://aclanthology.org/2020.nlposs-1.7.pdf). For all other languages we use the  [**NLTK**](https://www.nltk.org/api/nltk.tokenize.html) tokenizer.
+
+## Using Docker:
 * To Pull it: 
 ```
 docker pull akhyarahmed/dfkinludocker:bi_text_1.1.0
@@ -9,7 +10,7 @@ docker pull akhyarahmed/dfkinludocker:bi_text_1.1.0
 ```
 docker run --rm -it -p 8000:8000/tcp akhyarahmed/dfkinludocker:bi_text_1.1.0
 ```
-## Installing in Local Environment:
+## Using locally:
 ### Pre-requsites:
 * python 3.8 or above
 * pip 22
@@ -31,7 +32,12 @@ python3 -m main
 * Using URL: http://localhost:8000/bi-align/?src_text=your_text&tr_text=your_text
 
 ## **Sample Input**
-* Lets say, We want to find bitext alignment for **"昼間のレクサプロが副作用ひどくて未だに気持ち悪い"** this text and for **"Daytime Lexapro still makes me sick because the side effects are so bad"** this text . So below are some invoking methods to use this API:
+* Lets say, We want to find bitext alignment between the Japanese sentence **"昼間のレクサプロが副作用ひどくて未だに気持ち悪い"** and the English sentene **"Daytime Lexapro still makes me sick because the side effects are so bad"**.  The API call would look as follows:
+
+### **HTTP Call**
+```
+http://localhost:8000/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad
+```
 
 ### **Curl Call**
 ```
@@ -40,10 +46,6 @@ curl -X 'GET' \
   -H 'accept: application/json'
 ```
 
-### **HTTP Call**
-```
-http://localhost:8000/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad
-```
 ### **Python Request**
 ```
 import requests
