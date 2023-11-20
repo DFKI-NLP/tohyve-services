@@ -1,5 +1,5 @@
 # Text To Speech conversion (TTS)
-It's a tool to take a text and create a speech out of it. For speech transformation it uses Nvidia's NeMo [(Text-to-Speech)](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/tts/intro.html) models. It only takes German(de) or English(en) texts and converts them to their respective speech (.wav) versions.
+Generates speech for an input text. For speech transformation it uses Nvidia's NeMo [(Text-to-Speech)](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/tts/intro.html). It only takes German(de) or English(en) texts and converts them to their respective speech (.wav) versions.
 
 ## Installing Using Docker:
 ### To Pull it: 
