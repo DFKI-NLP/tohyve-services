@@ -1,5 +1,5 @@
 # Automatic Speech Recognition (ASR)
-It's a tool to extract streaming audio or take an audio file(mp3) than transfrom that audio into text. For text transformation it uses huggingface's [openai/whisper-medium](https://huggingface.co/openai/whisper-medium) model. This model is first implemented by [Radford et al., 2022](https://arxiv.org/abs/2212.04356).
+ASR transcripes spoken audio into text form. The service works with MP3-encoded audio files and audio streams. For ASR the project uses huggingface's [openai/whisper-medium](https://huggingface.co/openai/whisper-medium) model. This model is published by [Radford et al., 2022](https://arxiv.org/abs/2212.04356).
 
 ## Installing Using Docker:
 ### To Pull it: 
@@ -51,9 +51,9 @@ setx PATH "<path of unzipped ffmpeg>;%PATH%"
 ```
 python3 -m main
 ```
-## To interact with the tool:
+## The tool is available in:
 * <u>Interactive mode</u>:  https://dfki-3109.dfki.de/asr/
-* API call through [Python script](https://github.com/DFKI-NLP/tohyve-services/blob/master/automatic_speech_recognition/request_example.py)
+* API call [Python example](https://github.com/DFKI-NLP/tohyve-services/blob/master/automatic_speech_recognition/request_example.py)
 
 ## API Documentation:
 
