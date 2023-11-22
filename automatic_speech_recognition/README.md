@@ -61,53 +61,29 @@ python3 -m main
 https://dfki-3109.dfki.de
 
 ### Endpoints:
-**1. GET ASR Interaction Page:**
+**1. ASR Tool:**
+
+Get the details and the ASR capabilities for file-upload and microphone streaming.
+
 ```hs
 GET /asr
 ```
 
-**Description**
-
-Get the details and the ASR capabilities for file-upload and microphone streaming.
-
 **Parameters**
 
 ```
-input_language (string, required): Language code of the input audio. 
+input_language (string, required): Language code of the input audio.
 ```
-**Request Body**
-```hs
-{
-    "fn_index":4, # always use 4, it's a fixed code from the Gradio 
-    "data": [
-        "input_language", # this need to be change according to the audio language code 
-        {
-            "data":"data:audio/wav;base64," + str(base64_encoded_audio),
-            "name":"sample_audio.mp3" # just give any name
-        }
-    ]
-}
-```
-
-**Response**
-```hs
-{
-    "data":["transcribe text"],
-    "is_generating":boolean response,
-    "duration":time to produce result,
-    "average_duration":average time to produce each result
-}
-```
+*All other language codes can be found [here](https://dfki-3109.dfki.de/asr/).*
 
 
-**2. Direct Transcription Request:**
+**2. ASR Requests:**
+
+The main endpoint which performs the ASR. Anyone using this endpoint can directly get the ASR results from our tool.
+
 ```hs
 POST /asr/run/predict
 ```
-
-**Description**
-
-Produce transcriptions for a single audio.
 
 **Parameters**
 
@@ -119,7 +95,10 @@ a dictionary (dictioanry, required): Contains two elements, data and name.
 inner data (string, required): Base64 encoded string for the input audio.
 name (string, required): A name for the audio.
 ```
-**Request Body**
+
+N.B: Both **1.** and **2.** endpoints has the same request body and responses. 
+
+**Request Body (Input data format)**
 ```hs
 {
     "fn_index":4, # always use 4, it's a fixed code from the Gradio 
