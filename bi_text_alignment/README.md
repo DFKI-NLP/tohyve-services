@@ -34,7 +34,7 @@ python3 -m main
   2. Bi-Token Alignment: http://localhost:8008/bi-align-tokens/?src_tokens=sample_tokens&tr_tokens=sample_tokens
 
 ## **Below shows different ways of using both services:**
-## **1. Bi-Text Alignment**
+## **1. Bi-Text Alignment (/bi-align-text)**
 Lets say, We want to find bi-text alignment between the Japanese sentence **"昼間のレクサプロが副作用ひどくて未だに気持ち悪い"** and the English sentene **"Daytime Lexapro still makes me sick because the side effects are so bad"**.  The API call would look as follows:
 
 ### **Parameters:**
@@ -147,7 +147,7 @@ print(resp)
 }
 ```
 
-## **2. Bi-Token Alignment**
+## **2. Bi-Token Alignment (/bi-align-tokens)**
 Lets say, We want to find bitext alignment for **['Aired', 'on', 'New', 'Zealand', "'s", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television]'** this tokens and for **['Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television']** this tokens. So below are some invoking methods to use this API:
 
 ### **Parameters:**
