@@ -75,7 +75,8 @@ https://dfki-3109.dfki.de
 ### Endpoints:
 **1. Machine Translation Tool:**
 
-Get the details and the MT capabilities for a text.
+Get the details and the MT functionality for a text.
+
 ```hs
 GET /mt
 ```

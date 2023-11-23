@@ -1,9 +1,9 @@
 '''
 To start it:
-uvicorn main:app --reload
+uvicorn main:app 
 
 To use it go to:
-http://127.0.0.1:8000/docs/
+http://127.0.0.1:8008/docs/
 
 '''
 import time
@@ -18,6 +18,8 @@ from bi_text_align import align_text
 from fastapi import FastAPI, HTTPException, Query
 
 bitext_obj = BiTextModels() # Load Bi-text Alignment model
+
+# api description and tags
 description = "It's a bi-text alignment tool. The tool also align tokens from two different languages. It uses SIMALIGN to align two texts."
 tags_metadata = [
     {
@@ -48,6 +50,7 @@ def read_root():
     return {"Machine": "Hello! I am Bi-text alignment tool!"}
 
 
+# route for bi-text alignment of texts
 @app.get("/bi-align-text/",  tags=["bi-align-text"])
 def read_bi_align_text(src_text: str, tr_text: str):
     try:
@@ -70,6 +73,7 @@ def read_bi_align_text(src_text: str, tr_text: str):
         return HTTPException(status_code=400, detail=str(e)+" "+traceback.format_exc())
     
 
+# route for bi-text alignment of tokens
 @app.get("/bi-align-tokens/",  tags=["bi-align-tokens"])
 def read_bi_align_tokens(src_tokens: str, tr_tokens: str):
     try:
@@ -96,7 +100,7 @@ def read_bi_align_tokens(src_tokens: str, tr_tokens: str):
     except Exception as e:
         return HTTPException(status_code=400, detail=str(e)+" "+traceback.format_exc())
 
+
 # the main function
 if __name__=="__main__":
-    # uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) # this command will use for development purposes only
-    uvicorn.run("main:app", host="0.0.0.0", port=8008) # this command will use bofore creating a docker container
+    uvicorn.run("main:app", host="0.0.0.0", port=8008) 

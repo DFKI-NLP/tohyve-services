@@ -82,10 +82,6 @@ class MT:
 
         global app 
         app = gr.mount_gradio_app(app, demo, path=CUSTOM_PATH)
-        # demo.launch(server_name="0.0.0.0", server_port=8000)# to change port number, we can change "server_port" 
-        # # demo.launch(server_name="0.0.0.0", server_port=8000, share=True)# to launch it to gradio public server
-        
-        # uvicorn.run("mt:app", host="0.0.0.0", port=8002, reload=True) # this command will use for development purposes only
         uvicorn.run("mt:app", host="0.0.0.0", port=8002)
         return
 

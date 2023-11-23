@@ -109,13 +109,8 @@ class ASR:
             gr.TabbedInterface([micro_transcribe, file_transcribe], ["Transcribe Microphone", "Transcribe File"])
 
 
-        # gradio_app = gr.routes.App.create_app(demo)
-        # app.mount(CUSTOM_PATH, gradio_app)
         global app 
         app = gr.mount_gradio_app(app, demo, path=CUSTOM_PATH)
-        # demo.launch(server_name="0.0.0.0", server_port=8000)# to change port number, we can change "server_port" 
-        # # demo.launch(server_name="0.0.0.0", server_port=8000, share=True)# to launch it to gradio public server
         
-        # uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) # this command will use for development purposes only
         uvicorn.run("transcribe:app", host="0.0.0.0", port=8001)
         return

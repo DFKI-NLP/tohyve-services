@@ -1,7 +1,7 @@
 # Text To Speech conversion (TTS)
-Generates speech for an input text. For speech transformation it uses Nvidia's NeMo [(Text-to-Speech)](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/tts/intro.html). It only takes German(de) or English(en) texts and converts them to their respective speech (.wav) versions.
+Generates speech for an input text. For speech transformation it uses the Nvidia NeMo [(Text-to-Speech)](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/tts/intro.html). Nvidia NeMo also provides TTS for other languages, but we have to use their specific models for that particular language. For that anyone have to go to that [link](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/tts/checkpoints.html) and select their model. To use that model you just have to import them in this code [script](https://github.com/DFKI-NLP/tohyve-services/blob/master/text_to_speech_conversion/model.py) and have to modify code in **get_conversion()** method from [convert.py](https://github.com/DFKI-NLP/tohyve-services/blob/master/text_to_speech_conversion/convert.py) for that particular language model. For now we only takes German(de) or English(en) texts and converts them to their respective speech (.wav) versions.
 
-## Installing Using Docker:
+## Installation Using Docker:
 ### To Pull it: 
 * Container Size (~7GB)
 ```hs
@@ -97,14 +97,13 @@ and [predict.txt](https://github.com/DFKI-NLP/tohyve-services/blob/master/text_t
 https://dfki-3109.dfki.de
 
 ### Endpoints:
-**1. GET TTS Interaction Page:**
+**1. Text-to-Speech Tool:**
+
+Get the details and the Text-to-Speech functionality for a text.
+
 ```hs
 GET /tts
 ```
-
-**Description**
-
-Get the details and the TTS capabilities for a text.
 
 **Parameters**
 
@@ -123,15 +122,17 @@ text (string, required): Input text.
 ```
 
 **Response**
+
+```
 Base64 encoded string of input text which later tranform into an audio.
+```
 
-
-**2. Direct Text-to-Speech Request:**
+**2. Text-to-Speech Requests:**
 
 Need to send two requests to get the TTS audio. First POST request will generate the audio and second GET request will return the generated audio.
 
 ```hs
-1. POST /tts/run/predict
+2.1 POST /tts/run/predict
 ```
 
 **Description**
@@ -146,14 +147,9 @@ input_language (string, required): Language code of the input text.
 text (string, required): Input text.
 ```
 **Request Body**
-```hs
-{ 
-    "data": [
-        "input_language", # this need to be change according to the input text's language code
-        "text", # input text
-    ]
-}
-```
+
+The same request body as before.
+
 
 **Response**
 ```hs
@@ -172,10 +168,11 @@ text (string, required): Input text.
 }
 ```
 ```hs
-2. GET /tts/file=/tmp/gradio/unique_id/orig_name from the above
+2.2 GET /tts/file=/tmp/gradio/unique_id/orig_name from the above
 ```
 
 **Description**
+
 Get the generated audio from the server.
 
 **Parameters**
