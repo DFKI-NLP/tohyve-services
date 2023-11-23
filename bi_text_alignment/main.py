@@ -48,7 +48,7 @@ def read_root():
     return {"Machine": "Hello! I am Bi-text alignment tool!"}
 
 
-@app.get("/bi-align/",  tags=["bi-align-text"])
+@app.get("/bi-align-text/",  tags=["bi-align-text"])
 def read_bi_align_text(src_text: str, tr_text: str):
     try:
         start_time = time.time()

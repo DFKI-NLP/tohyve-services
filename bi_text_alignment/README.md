@@ -1,5 +1,5 @@
 # Bitext Alignment
-Bitext alignment is a tool to find aligned words between two different language sentences. We used [***simalign***](https://github.com/cisnlp/simalign), Which was published in [***SimAlign: High Quality Word Alignments Without Parallel Training Data Using Static and Contextualized Embeddings***](https://aclanthology.org/2020.findings-emnlp.147.pdf). For Japanase sentence tokenization we use the [***fugashi***](https://pypi.org/project/fugashi/) tokenizer, which published [here](https://aclanthology.org/2020.nlposs-1.7.pdf). For all other languages we use the  [**NLTK**](https://www.nltk.org/api/nltk.tokenize.html) tokenizer.
+Bitext alignment is a tool to find aligned words between two language sentences or lists of words. We used [***simalign***](https://github.com/cisnlp/simalign), Which was published in [***SimAlign: High Quality Word Alignments Without Parallel Training Data Using Static and Contextualized Embeddings***](https://aclanthology.org/2020.findings-emnlp.147.pdf). For Japanase sentence tokenization we use the [***fugashi***](https://pypi.org/project/fugashi/) tokenizer, which published [here](https://aclanthology.org/2020.nlposs-1.7.pdf). For all other languages we use the  [**NLTK**](https://www.nltk.org/api/nltk.tokenize.html) tokenizer.
 
 ## Using Docker:
 * To Pull it: 
@@ -29,27 +29,36 @@ python3 -m main
 ```
 ## **To interact with the API:**
 * Interactive mode: http://localhost:8008/docs/
-* Using URL: http://localhost:8008/bi-align/?src_text=your_text&tr_text=your_text
+* Two functionalities: 
+  1. Bi-Text Alignment: http://localhost:8008/bi-align-text/?src_text=sample_text&tr_text=sample_text
+  2. Bi-Token Alignment: http://localhost:8008/bi-align-tokens/?src_tokens=sample_tokens&tr_tokens=sample_tokens
 
-## **Sample Input**
-* Lets say, We want to find bitext alignment between the Japanese sentence **"昼間のレクサプロが副作用ひどくて未だに気持ち悪い"** and the English sentene **"Daytime Lexapro still makes me sick because the side effects are so bad"**.  The API call would look as follows:
+## **Below shows different ways of using both services:**
+## **1. Bi-Text Alignment**
+Lets say, We want to find bi-text alignment between the Japanese sentence **"昼間のレクサプロが副作用ひどくて未だに気持ち悪い"** and the English sentene **"Daytime Lexapro still makes me sick because the side effects are so bad"**.  The API call would look as follows:
+
+### **Parameters:**
+```sh
+src_text (String, required): A text of any language. Above shows the presentation of each input.
+tr_text (String, required): A text of any language.Above shows the presentation of each input.
+```
 
 ### **HTTP Call**
 ```
-http://localhost:8008/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad
+http://localhost:8008/bi-align-text/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad
 ```
 
 ### **Curl Call**
 ```
 curl -X 'GET' \
-  'http://localhost:8008/bi-align/?src_text=%E6%98%BC%E9%96%93%E3%81%AE%E3%83%AC%E3%82%AF%E3%82%B5%E3%83%97%E3%83%AD%E3%81%8C%E5%89%AF%E4%BD%9C%E7%94%A8%E3%81%B2%E3%81%A9%E3%81%8F%E3%81%A6%E6%9C%AA%E3%81%A0%E3%81%AB%E6%B0%97%E6%8C%81%E3%81%A1%E6%82%AA%E3%81%84&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad' \
+  'http://localhost:8008/bi-align-text/?src_text=%E6%98%BC%E9%96%93%E3%81%AE%E3%83%AC%E3%82%AF%E3%82%B5%E3%83%97%E3%83%AD%E3%81%8C%E5%89%AF%E4%BD%9C%E7%94%A8%E3%81%B2%E3%81%A9%E3%81%8F%E3%81%A6%E6%9C%AA%E3%81%A0%E3%81%AB%E6%B0%97%E6%8C%81%E3%81%A1%E6%82%AA%E3%81%84&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad' \
   -H 'accept: application/json'
 ```
 
 ### **Python Request**
 ```
 import requests
-url = "http://localhost:8008/bi-align"
+url = "http://localhost:8008/bi-align-text"
 params = {"src_text": "昼間のレクサプロが副作用ひどくて未だに気持ち悪い", "tr_text": "Daytime Lexapro still makes me sick because the side effects are so bad"}
 resp = requests.get(url=url, params=params).json()
 print(resp)
@@ -77,7 +86,7 @@ print(resp)
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8008/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime Lexapro still makes me sick because the side effects are so bad",
+					"raw": "http://localhost:8008/bi-align-text/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime Lexapro still makes me sick because the side effects are so bad",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -135,12 +144,15 @@ print(resp)
   "execution_time": 1.07
 }
 ```
-## **To interact with the API: (bi-align-tokens)**
-* Interactive mode: http://localhost:8008/docs/
-* Using URL: http://localhost:8008/bi-align-tokens/?src_tokens=your_token_list&tr_tokens=your_token_list
 
-## **Sample Input**
-* Lets say, We want to find bitext alignment for **['Aired', 'on', 'New', 'Zealand', "'s", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television']** this token list and for **['Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television']** this token list . So below are some invoking methods to use this API:
+## **2. Bi-Token Alignment**
+Lets say, We want to find bitext alignment for **'Aired', 'on', 'New', 'Zealand', "'s", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television'** this tokens and for **'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television'** this tokens. So below are some invoking methods to use this API:
+
+### **Parameters:**
+```sh
+src_tokens (String, required): A list of words of any language, sperated by a comma(','). Above shows the presentation of each input.
+tr_tokens (String, required): A list of words of any language, sperated by a comma(','). Above shows the presentation of each input.
+```
 
 ### **Curl Call**
 ```
