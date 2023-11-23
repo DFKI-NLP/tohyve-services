@@ -115,7 +115,8 @@ print(resp)
 ```
 ### **Interactive Mode**
 (After going to  http://localhost:8008/docs/)
-![image](https://user-images.githubusercontent.com/26096858/223685310-0c0c42e6-1da5-4294-88e6-9033c8001380.png)
+![image](https://github.com/DFKI-NLP/tohyve-services/assets/26096858/3f3fa5fc-8b70-46ec-95fe-92a9570ff7bd)
+
 
 ## Sample Ouput:
 ```yaml
