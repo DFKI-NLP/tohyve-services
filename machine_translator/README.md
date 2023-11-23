@@ -1,5 +1,5 @@
 # Machine Translator Tool
-Translate a text from a specific language to another language using machine translation. Machine translation is performed by the huggingface model <u>[facebook/m2m100_418M](https://huggingface.co/facebook/m2m100_418M)</u> developed by [facebook research](https://arxiv.org/abs/2010.11125)facebook-research.  The **M2M100 418M** model is a multilingual encoder-decoder (seq-to-seq) trained for  multilingual translation. The model  can directly translate between a set of 100 languages. The model takes a **text**(string), **source_language**  (See ***Language Covered*** section below for the language code!!) and a **target_language** (See ***Language Covered*** section below for the language code!!). We did this translation sentence-wise just to avoid maximum length exceed issue. Our tool can translate directly between any pair of 50 languages. 
+Translate a text from a specific language to another language using machine translation. Machine translation is performed by the huggingface model <u>[facebook/m2m100_418M](https://huggingface.co/facebook/m2m100_418M)</u> developed by [facebook research](https://arxiv.org/abs/2010.11125)facebook-research.  The **M2M100 418M** model is a multilingual encoder-decoder (seq-to-seq) trained for  multilingual translation. The model  can directly translate between a set of 100 languages. The model takes a **text**(string), **source_language**  (See ***Language Covered*** section below for the language code!!) and a **target_language** (See ***Language Covered*** section below for the language code!!). We did this translation sentence-wise just to avoid maximum length exceed issue.
 ## Installing Using Docker:
 ### To Pull it: 
 * Container Size (~9GB)
@@ -73,14 +73,12 @@ Where [curl.json](https://github.com/DFKI-NLP/tohyve-services/blob/master/machin
 https://dfki-3109.dfki.de
 
 ### Endpoints:
-**1. GET MT Interaction Page:**
+**1. Machine Translation Tool:**
+
+Get the details and the MT capabilities for a text.
 ```hs
 GET /mt
 ```
-
-**Description**
-
-Get the details and the MT capabilities for a text.
 
 **Parameters**
 
@@ -89,36 +87,16 @@ text_language (string, required): Language code of the input text.
 text (string, required): Input text.
 target_language (string, required): Language code of the target language.
 ```
-**Request Body**
-```hs
-{ 
-    "data": [
-        "text_language", # this need to be change according to the input text's language code
-        "text", # input text
-        "target_language" # this need to be change according to the desired text language code
-    ]
-}
-```
-
-**Response**
-```hs
-{
-    "data":["translated text"],
-    "is_generating":boolean response,
-    "duration":time to produce result,
-    "average_duration":average time to produce each result
-}
-```
+*All other language codes can be found [here](https://dfki-3109.dfki.de/mt/).*
 
 
-**2. Direct Machine Translation Request:**
+**2. Machine Translation Requests:**
+
+The main endpoint which performs the Machine Transaltion(MT). Anyone using this endpoint can directly get the MT results from our tool.
+
 ```hs
 POST /mt/run/predict
 ```
-
-**Description**
-
-Produce tranlation for a text.
 
 **Parameters**
 
@@ -128,6 +106,9 @@ input_language (string, required): Language code of the input text.
 text (string, required): Input text.
 target_language (string, required): Language code of the target language.
 ```
+
+N.B: Both **1.** and **2.** endpoints has the same request body and responses. 
+
 **Request Body**
 ```hs
 { 
