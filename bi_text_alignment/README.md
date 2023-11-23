@@ -4,11 +4,11 @@ Bitext alignment is a tool to find aligned words between two different language 
 ## Using Docker:
 * To Pull it: 
 ```
-docker pull akhyarahmed/dfkinludocker:bi_text_1.1.0
+docker pull dfkitohyve/tohyveservices:bi-text-token-align-v1
 ```
 * To Run it: 
 ```
-docker run --rm -it -p 8000:8000/tcp akhyarahmed/dfkinludocker:bi_text_1.1.0
+docker run -p 8008:8008/tcp dfkitohyve/tohyveservices:bi-text-token-align-v1
 ```
 ## Using locally:
 ### Pre-requsites:
@@ -27,29 +27,29 @@ cd dfki_nlu_docker/bi_text_alignment
 ```
 python3 -m main
 ```
-## **To interact with the API: (bi-align)**
-* Interactive mode: http://localhost:8000/docs/
-* Using URL: http://localhost:8000/bi-align/?src_text=your_text&tr_text=your_text
+## **To interact with the API:**
+* Interactive mode: http://localhost:8008/docs/
+* Using URL: http://localhost:8008/bi-align/?src_text=your_text&tr_text=your_text
 
 ## **Sample Input**
 * Lets say, We want to find bitext alignment between the Japanese sentence **"昼間のレクサプロが副作用ひどくて未だに気持ち悪い"** and the English sentene **"Daytime Lexapro still makes me sick because the side effects are so bad"**.  The API call would look as follows:
 
 ### **HTTP Call**
 ```
-http://localhost:8000/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad
+http://localhost:8008/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad
 ```
 
 ### **Curl Call**
 ```
 curl -X 'GET' \
-  'http://localhost:8000/bi-align/?src_text=%E6%98%BC%E9%96%93%E3%81%AE%E3%83%AC%E3%82%AF%E3%82%B5%E3%83%97%E3%83%AD%E3%81%8C%E5%89%AF%E4%BD%9C%E7%94%A8%E3%81%B2%E3%81%A9%E3%81%8F%E3%81%A6%E6%9C%AA%E3%81%A0%E3%81%AB%E6%B0%97%E6%8C%81%E3%81%A1%E6%82%AA%E3%81%84&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad' \
+  'http://localhost:8008/bi-align/?src_text=%E6%98%BC%E9%96%93%E3%81%AE%E3%83%AC%E3%82%AF%E3%82%B5%E3%83%97%E3%83%AD%E3%81%8C%E5%89%AF%E4%BD%9C%E7%94%A8%E3%81%B2%E3%81%A9%E3%81%8F%E3%81%A6%E6%9C%AA%E3%81%A0%E3%81%AB%E6%B0%97%E6%8C%81%E3%81%A1%E6%82%AA%E3%81%84&tr_text=Daytime%20Lexapro%20still%20makes%20me%20sick%20because%20the%20side%20effects%20are%20so%20bad' \
   -H 'accept: application/json'
 ```
 
 ### **Python Request**
 ```
 import requests
-url = "http://localhost:8000/bi-align"
+url = "http://localhost:8008/bi-align"
 params = {"src_text": "昼間のレクサプロが副作用ひどくて未だに気持ち悪い", "tr_text": "Daytime Lexapro still makes me sick because the side effects are so bad"}
 resp = requests.get(url=url, params=params).json()
 print(resp)
@@ -59,7 +59,7 @@ print(resp)
 {
 	"info": {
 		"_postman_id": "8af37e0a-c798-475a-ae0e-be27d1ac8c71",
-		"name": "DFKI_Bi_Text_Alignment",
+		"name": "Bi_Text_Alignment",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "2294233"
 	},
@@ -77,7 +77,7 @@ print(resp)
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8000/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime Lexapro still makes me sick because the side effects are so bad",
+					"raw": "http://localhost:8008/bi-align/?src_text=昼間のレクサプロが副作用ひどくて未だに気持ち悪い&tr_text=Daytime Lexapro still makes me sick because the side effects are so bad",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -105,7 +105,7 @@ print(resp)
 }
 ```
 ### **Interactive Mode**
-(After going to  http://localhost:8000/docs/)
+(After going to  http://localhost:8008/docs/)
 ![image](https://user-images.githubusercontent.com/26096858/223685310-0c0c42e6-1da5-4294-88e6-9033c8001380.png)
 
 ## Sample Ouput:
@@ -136,8 +136,8 @@ print(resp)
 }
 ```
 ## **To interact with the API: (bi-align-tokens)**
-* Interactive mode: http://localhost:8000/docs/
-* Using URL: http://localhost:8000/bi-align-tokens/?src_tokens=your_token_list&tr_tokens=your_token_list
+* Interactive mode: http://localhost:8008/docs/
+* Using URL: http://localhost:8008/bi-align-tokens/?src_tokens=your_token_list&tr_tokens=your_token_list
 
 ## **Sample Input**
 * Lets say, We want to find bitext alignment for **['Aired', 'on', 'New', 'Zealand', "'s", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television']** this token list and for **['Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television']** this token list . So below are some invoking methods to use this API:
@@ -145,18 +145,18 @@ print(resp)
 ### **Curl Call**
 ```
 curl -X 'GET' \
-  'http://localhost:8000/bi-align-tokens/?src_tokens=%5B%27Aired%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%22%27s%22%2C%20%27National%27%2C%20%27News%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%5D&tr_tokens=%5B%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27National%27%2C%20%27Television%27%5D' \
+  'http://localhost:8008/bi-align-tokens/?src_tokens=%5B%27Aired%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%22%27s%22%2C%20%27National%27%2C%20%27News%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%5D&tr_tokens=%5B%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27National%27%2C%20%27Television%27%5D' \
   -H 'accept: application/json'
 ```
 
 ### **HTTP Call**
 ```
-http://localhost:8000/bi-align-tokens/?src_tokens=%5B%27Aired%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%22%27s%22%2C%20%27National%27%2C%20%27News%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%5D&tr_tokens=%5B%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27National%27%2C%20%27Television%27%5D
+http://localhost:8008/bi-align-tokens/?src_tokens=%5B%27Aired%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%22%27s%22%2C%20%27National%27%2C%20%27News%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%5D&tr_tokens=%5B%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27%3A%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27Television%27%2C%20%27YouTube%27%2C%20%27-%27%2C%20%27Richard%27%2C%20%27Gage%27%2C%20%27AIA%27%2C%20%27on%27%2C%20%27New%27%2C%20%27Zealand%27%2C%20%27National%27%2C%20%27National%27%2C%20%27Television%27%5D
 ```
 ### **Python Request**
 ```
 import requests
-url = "http://localhost:8000/bi-align-tokens"
+url = "http://localhost:8008/bi-align-tokens"
 src_tokens = ['Aired', 'on', 'New', 'Zealand', "'s", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television']
 trg_tokens = ['Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television']
 params = {"src_tokens": str(src_tokens), "tr_tokens": str(trg_tokens)}
@@ -168,7 +168,7 @@ print(resp)
 {
 	"info": {
 		"_postman_id": "f6ab2dcf-eee5-4384-b940-8fc8d4b69a30",
-		"name": "DFKI_Bi_Text_Alignment",
+		"name": "Bi_Text_Alignment",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "2294233"
 	},
@@ -179,7 +179,7 @@ print(resp)
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/bi-align-tokens/?src_tokens=['Aired', 'on', 'New', 'Zealand', \"'s\", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television']&tr_tokens=['Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television']",
+					"raw": "http://localhost:8008/bi-align-tokens/?src_tokens=['Aired', 'on', 'New', 'Zealand', \"'s\", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television']&tr_tokens=['Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television']",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -207,7 +207,7 @@ print(resp)
 }
 ```
 ### **Interactive Mode**
-(After going to  http://localhost:8000/docs/)
+(After going to  http://localhost:8008/docs/)
 ![image](https://user-images.githubusercontent.com/26096858/226926774-452d0306-effc-4af8-ba63-874cb62f6d89.png)
 
 ## Sample Ouput:

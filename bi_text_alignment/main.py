@@ -18,14 +18,14 @@ from bi_text_align import align_text
 from fastapi import FastAPI, HTTPException, Query
 
 bitext_obj = BiTextModels() # Load Bi-text Alignment model
-description = "It's a bi-text alignment tool for DFKI. It uses SIMALIGN to align two texts."
+description = "It's a bi-text alignment tool. The tool also align tokens from two different languages. It uses SIMALIGN to align two texts."
 tags_metadata = [
     {
         "name": "/",
         "description": "The root of this API."
     },
     {
-        "name": "bi-align",
+        "name": "bi-align-text",
         "description": "It takes two texts from two different languages and return the list of aligned words among these two texts."
     },
     {
@@ -36,7 +36,7 @@ tags_metadata = [
 
 # initialize FastAPI
 app = FastAPI(
-    title="DFKI NLU Bi-text Alignment Tool",
+    title="Bi-text Alignment Tool",
     description = description,
     openapi_tags = tags_metadata
 )
@@ -45,10 +45,10 @@ app = FastAPI(
 # the root directory
 @app.get("/", tags=["/"])
 def read_root():
-    return {"Machine": "Hello! I am a DFKI Bi-text alignment tool!"}
+    return {"Machine": "Hello! I am Bi-text alignment tool!"}
 
 
-@app.get("/bi-align/",  tags=["bi-align"])
+@app.get("/bi-align/",  tags=["bi-align-text"])
 def read_bi_align_text(src_text: str, tr_text: str):
     try:
         start_time = time.time()
@@ -99,4 +99,4 @@ def read_bi_align_tokens(src_tokens: str, tr_tokens: str):
 # the main function
 if __name__=="__main__":
     # uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) # this command will use for development purposes only
-    uvicorn.run("main:app", host="0.0.0.0", port=8000) # this command will use bofore creating a docker container
+    uvicorn.run("main:app", host="0.0.0.0", port=8008) # this command will use bofore creating a docker container
