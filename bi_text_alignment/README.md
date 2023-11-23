@@ -115,7 +115,8 @@ print(resp)
 ```
 ### **Interactive Mode**
 (After going to  http://localhost:8008/docs/)
-![image](https://github.com/DFKI-NLP/tohyve-services/assets/26096858/3f3fa5fc-8b70-46ec-95fe-92a9570ff7bd)
+![image](https://github.com/DFKI-NLP/tohyve-services/assets/26096858/ea0ec505-5211-40a4-8d9b-0f7e708dedad)
+
 
 
 ## Sample Ouput:
