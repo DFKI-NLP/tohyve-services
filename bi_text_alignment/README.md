@@ -148,7 +148,7 @@ print(resp)
 ```
 
 ## **2. Bi-Token Alignment**
-Lets say, We want to find bitext alignment for **'Aired', 'on', 'New', 'Zealand', "'s", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television'** this tokens and for **'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television'** this tokens. So below are some invoking methods to use this API:
+Lets say, We want to find bitext alignment for **['Aired', 'on', 'New', 'Zealand', "'s", 'National', 'News', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television]'** this tokens and for **['Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', ':', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'Television', 'YouTube', '-', 'Richard', 'Gage', 'AIA', 'on', 'New', 'Zealand', 'National', 'National', 'Television']** this tokens. So below are some invoking methods to use this API:
 
 ### **Parameters:**
 ```sh
