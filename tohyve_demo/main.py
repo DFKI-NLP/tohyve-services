@@ -63,7 +63,13 @@ async def websocket_endpoint(websocket: WebSocket):
                 collected_messages.append(asr_response)
 
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
+        # if len(collected_messages):
+        #     # await manager.connect(websocket)
+        #     asr_responses = " ".join(collected_messages)
+        #     collected_messages = []
+        #     await manager.send_personal_message(websocket, asr_responses, asr_succ, src, trg)
+        # await manager.disconnect(websocket)
+        pass
     
     except ConnectionClosedError as e:
         if e.code == 1011:
@@ -75,6 +81,8 @@ async def websocket_endpoint(websocket: WebSocket):
         # Handle other exceptions
         print(f"Unexpected error: {e}")
 
+class Config:
+    keep_alive=60
 
 # Start the WebSocket server in a separate thread
 if __name__ == '__main__':

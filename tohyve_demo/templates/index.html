@@ -161,8 +161,8 @@
         let audioFiles = [];
         const audioPlayer = document.getElementById('audioPlayer');
         const streamUrl = document.getElementById('streamingUrl');
-        const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws'; // this can be replaced by with your websocket address
-        // const websocketServerUrl = 'ws://localhost:8005/ws';
+        // const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws'; // this can be replaced by with your websocket address
+        const websocketServerUrl = 'ws://localhost:8005/ws';
         const startButton = document.getElementById('startButton');
         const responseDiv = document.getElementById('streaming-response');
         const sourceLanguage = document.getElementById("source_language");
@@ -446,33 +446,53 @@
 
         // Function to fetch audio data and return as ArrayBuffer
         async function fetchAudioData(url, socket) {
+            let audio_chunks = []; 
             try {
                 const response = await fetch(url, { method: 'GET' });
-
                 if (!response.ok) {
                     throw new Error(`Failed to fetch audio: ${response.status} ${response.statusText}`);
                 }
 
                 const reader = response.body.getReader();
-
                 while (!stopFetching) {
                     const { value, done } = await reader.read();
 
                     if (done) {
+                        if (audio_chunks.length){
+                            await sendAudioToWebSocket(audio_chunks, socket);
+                        }
                         console.log('Streaming finished.');
                         break;
                     }
                     // Send the audio chunk to the WebSocket
-                    sendAudioToWebSocket(value, socket);
+                    // sendAudioToWebSocket(value, socket);
+                    audio_chunks.push(value);
+                    if(audio_chunks.length >=100){
+                        await sendAudioToWebSocket(audio_chunks, socket);
+                        audio_chunks = [];
+                    }
+
                 }
 
             } catch (error) {
                 console.error('Error fetching audio:', error);
                 startButton.textContent = "Start"
             }
-            if (socket) {
-                socket.close();
-            }
+            // if (socket) {
+            //     socket.close();
+            // }
+            // // Concatenate all chunks into a single Uint8Array
+            // const concatenated = new Uint8Array(audio_chunks.reduce((acc, chunk) => acc + chunk.length, 0));
+            // let offset = 0;
+            // audio_chunks.forEach(chunk => {
+            //     concatenated.set(chunk, offset);
+            //     offset += chunk.length;
+            // });
+
+            // // Convert Uint8Array to base64
+            // const InnerBase64Data = arrayBufferToBase64(concatenated);
+            // audioPlayer.src = ('data:audio/wav;base64,'+InnerBase64Data);
+            // audioPlayer.play();
         }
         
         // Function to convert ArrayBuffer to Base64
@@ -487,10 +507,18 @@
                 return btoa(binary);
             }
             else{
+                // Concatenate all chunks into a single Uint8Array
+                const concatenated = new Uint8Array(buffer.reduce((acc, chunk) => acc + chunk.length, 0));
+                let offset = 0;
+                buffer.forEach(chunk => {
+                    concatenated.set(chunk, offset);
+                    offset += chunk.length;
+                });
+
                 var binary = '';
-                var len = buffer.byteLength;
+                var len = concatenated.byteLength;
                 for (var i = 0; i < len; i++) {
-                    binary += String.fromCharCode(buffer[ i ]);
+                    binary += String.fromCharCode(concatenated[ i ]);
                 }
                 return btoa(binary);
             }
@@ -498,8 +526,8 @@
         }
 
         // Function which sends streaming to the server
-        function sendAudioToWebSocket(audioChunk, socket) {
-            base64data = "data:audio/wav;base64," + arrayBufferToBase64(audioChunk);
+        async function sendAudioToWebSocket(audioChunk, socket) {
+            base64data = "data:audio/mpeg;base64," + arrayBufferToBase64(audioChunk);
             // Format the data into a JSON object
             const jsonData = {
                 fn_index:4,
@@ -515,6 +543,7 @@
             };
 
             if (socket.readyState === WebSocket.OPEN) {
+                // console.log(jsonData);
                 socket.send(JSON.stringify(jsonData));
             }
         }

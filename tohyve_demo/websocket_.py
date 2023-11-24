@@ -48,7 +48,7 @@ class ConnectionManager:
         self.active_connections.append(websocket)
    
     # method to disconnect with websocket
-    def disconnect(self, websocket):
+    async def disconnect(self, websocket):
         self.active_connections.remove(websocket)
 
     # method to perform asr
@@ -60,6 +60,8 @@ class ConnectionManager:
         target_language = json_data["target_language"]
         file_upload = bool(json_data["file_upload"])
         json_data.pop('target_language', None)
+        json_data.pop('file_upload', None)
+        
         headers = {"Content-Type": "application/json"}
         asr_response_text = ""
         try:
@@ -75,6 +77,7 @@ class ConnectionManager:
                 raise Exception
         except Exception as e:
             asr_response_text = "ASR REQUEST ERROR"
+        print(asr_response_text)
         return asr_response_text, asr_success, source_language, target_language, file_upload
 
     # method to identify ending of a string. 
