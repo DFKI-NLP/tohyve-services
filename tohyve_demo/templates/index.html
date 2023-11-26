@@ -400,6 +400,13 @@
                             playNextTrack();
                         }
                     }
+                    if (key == "response"){
+                        var row = table.insertRow();
+                        console.log('key Response:', jsonResponse[key]);
+                        var tts_cell = row.insertCell(0);
+                        tts_cell.innerHTML = "ping "+jsonResponse[key];
+                        // ping(socket);
+                    }
                 });
                 
                 // Create a new table row for the separator
@@ -444,6 +451,24 @@
             return btoa( binary );
         }
 
+
+
+        // method for waiting ping request
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+   
+
+        // // Send a ping frame every 30 seconds (adjust the interval as needed)
+        async function ping(socket){
+            // const message = createDataFormatStreaming("ping");
+            // await sendToWebsocket(message, socket);
+            socket.send("ping");
+            await delay(3000);
+            await ping(socket);
+        }
+
+
         // Function to fetch audio data and return as ArrayBuffer
         async function fetchAudioData(url, socket) {
             let audio_chunks = []; 
@@ -460,20 +485,35 @@
                     if (done) {
                         if (audio_chunks.length){
                             await sendAudioToWebSocket(audio_chunks, socket);
+                            audio_chunks = [];
                         }
-                        console.log('Streaming finished.');
+                        // console.log('Streaming finished.');
+                        // await ping(socket);
+                        // setInterval(() => {
+                        //         ping()
+                        // }, 3000);
                         break;
                     }
                     // Send the audio chunk to the WebSocket
                     // sendAudioToWebSocket(value, socket);
-                    audio_chunks.push(value);
+                    if(value){
+                        audio_chunks.push(value);
+                    }
+                    
                     if(audio_chunks.length >=100){
                         await sendAudioToWebSocket(audio_chunks, socket);
                         audio_chunks = [];
+                        // await delay(4000);
                     }
 
                 }
-
+                // async function ping(){
+                //     const message = createDataFormatStreaming("ping");
+                //     await sendToWebsocket(message, socket);
+                // }
+                // setInterval(() => {
+                //         ping()
+                // }, 3000);
             } catch (error) {
                 console.error('Error fetching audio:', error);
                 startButton.textContent = "Start"
@@ -525,11 +565,10 @@
 
         }
 
-        // Function which sends streaming to the server
-        async function sendAudioToWebSocket(audioChunk, socket) {
-            base64data = "data:audio/mpeg;base64," + arrayBufferToBase64(audioChunk);
-            // Format the data into a JSON object
-            const jsonData = {
+
+        //  create and send back formatted 
+        async function createDataFormatStreaming(base64data){
+            let data = {
                 fn_index:4,
                 data:[
                     sourceLanguage.value,
@@ -540,10 +579,24 @@
                 ],
                 target_language:targetLanguage.value,
                 file_upload:0
-            };
+            }
+            return data;
+        }
 
+
+        // Function which sends streaming to the server
+        async function sendAudioToWebSocket(audioChunk, socket) {
+            base64data = "data:audio/mpeg;base64," + arrayBufferToBase64(audioChunk);
+            // get the data format
+            const jsonData = await createDataFormatStreaming(base64data);
+            await sendToWebsocket(jsonData, socket);
+        }
+
+
+        // sending message to websocket
+        async function sendToWebsocket(jsonData, socket){
             if (socket.readyState === WebSocket.OPEN) {
-                // console.log(jsonData);
+                // Format the data into a JSON object and send it to socket
                 socket.send(JSON.stringify(jsonData));
             }
         }

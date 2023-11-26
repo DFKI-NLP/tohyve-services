@@ -1,5 +1,7 @@
 import uvicorn
 import logging
+import json
+import asyncio
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from websockets.exceptions import ConnectionClosedError
@@ -48,9 +50,11 @@ async def get(request: Request):
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     collected_messages = []
+    blank_req = 0
     try:
         while True:
             json_data = await websocket.receive_text()
+                        
             asr_response, asr_succ, src, trg, file_upload = await manager.get_asr(json_data)
 
             if (await manager.is_full_text(asr_response) and len(collected_messages)>0) or file_upload:
@@ -62,27 +66,19 @@ async def websocket_endpoint(websocket: WebSocket):
             else:
                 collected_messages.append(asr_response)
 
-    except WebSocketDisconnect:
-        # if len(collected_messages):
-        #     # await manager.connect(websocket)
-        #     asr_responses = " ".join(collected_messages)
-        #     collected_messages = []
-        #     await manager.send_personal_message(websocket, asr_responses, asr_succ, src, trg)
-        # await manager.disconnect(websocket)
-        pass
+
+    except WebSocketDisconnect as e:
+        await manager.disconnect(websocket)
     
     except ConnectionClosedError as e:
         if e.code == 1011:
             # Handle the specific error code 1011 (unexpected error)
             print(f"ConnectionClosedError: {e}")
-            # Your custom handling logic here
 
     except Exception as e:
         # Handle other exceptions
         print(f"Unexpected error: {e}")
 
-class Config:
-    keep_alive=60
 
 # Start the WebSocket server in a separate thread
 if __name__ == '__main__':
