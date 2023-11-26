@@ -161,8 +161,7 @@
         let audioFiles = [];
         const audioPlayer = document.getElementById('audioPlayer');
         const streamUrl = document.getElementById('streamingUrl');
-        // const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws'; // this can be replaced by with your websocket address
-        const websocketServerUrl = 'ws://localhost:8005/ws';
+        const websocketServerUrl = 'wss://dfki-3109.dfki.de/ws'; // this can be replaced by with your websocket address
         const startButton = document.getElementById('startButton');
         const responseDiv = document.getElementById('streaming-response');
         const sourceLanguage = document.getElementById("source_language");
@@ -443,7 +442,6 @@
         // Function to convert ArrayBuffer to Base64
         function arrayBufferToBase64(buffer) {
             var binary = '';
-            // var bytes = new Uint8Array( buffer );
             var len = buffer.byteLength;
             for (var i = 0; i < len; i++) {
                 binary += String.fromCharCode( buffer[ i ] );
@@ -461,8 +459,6 @@
 
         // // Send a ping frame every 30 seconds (adjust the interval as needed)
         async function ping(socket){
-            // const message = createDataFormatStreaming("ping");
-            // await sendToWebsocket(message, socket);
             socket.send("ping");
             await delay(3000);
             await ping(socket);
@@ -477,7 +473,6 @@
                 if (!response.ok) {
                     throw new Error(`Failed to fetch audio: ${response.status} ${response.statusText}`);
                 }
-
                 const reader = response.body.getReader();
                 while (!stopFetching) {
                     const { value, done } = await reader.read();
@@ -487,15 +482,9 @@
                             await sendAudioToWebSocket(audio_chunks, socket);
                             audio_chunks = [];
                         }
-                        // console.log('Streaming finished.');
-                        // await ping(socket);
-                        // setInterval(() => {
-                        //         ping()
-                        // }, 3000);
                         break;
                     }
                     // Send the audio chunk to the WebSocket
-                    // sendAudioToWebSocket(value, socket);
                     if(value){
                         audio_chunks.push(value);
                     }
@@ -503,36 +492,15 @@
                     if(audio_chunks.length >=100){
                         await sendAudioToWebSocket(audio_chunks, socket);
                         audio_chunks = [];
-                        // await delay(4000);
                     }
-
                 }
-                // async function ping(){
-                //     const message = createDataFormatStreaming("ping");
-                //     await sendToWebsocket(message, socket);
-                // }
-                // setInterval(() => {
-                //         ping()
-                // }, 3000);
+                if(stopFetching){
+                    socket.close();
+                }
             } catch (error) {
                 console.error('Error fetching audio:', error);
                 startButton.textContent = "Start"
             }
-            // if (socket) {
-            //     socket.close();
-            // }
-            // // Concatenate all chunks into a single Uint8Array
-            // const concatenated = new Uint8Array(audio_chunks.reduce((acc, chunk) => acc + chunk.length, 0));
-            // let offset = 0;
-            // audio_chunks.forEach(chunk => {
-            //     concatenated.set(chunk, offset);
-            //     offset += chunk.length;
-            // });
-
-            // // Convert Uint8Array to base64
-            // const InnerBase64Data = arrayBufferToBase64(concatenated);
-            // audioPlayer.src = ('data:audio/wav;base64,'+InnerBase64Data);
-            // audioPlayer.play();
         }
         
         // Function to convert ArrayBuffer to Base64

@@ -77,7 +77,6 @@ class ConnectionManager:
                 raise Exception
         except Exception as e:
             asr_response_text = "ASR REQUEST ERROR"
-        print(asr_response_text)
         return asr_response_text, asr_success, source_language, target_language, file_upload
 
     # method to identify ending of a string. 
