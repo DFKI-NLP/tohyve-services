@@ -1,21 +1,11 @@
 import uvicorn
-import logging
-import json
-import asyncio
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from websockets.exceptions import ConnectionClosedError
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-# from fastapi.responses import FileResponse
-# # from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from websocket_ import ConnectionManager
-
-
-# Set up logging configuration
-# logging.basicConfig(level=logging.INFO)  # Adjust the level as needed
-
 
 app = FastAPI()
 
@@ -28,10 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# # Mount the "static" directory to serve static files (JavaScript)
-# app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Mount the directory containing your HTML files
 templates = Jinja2Templates(directory="templates")
