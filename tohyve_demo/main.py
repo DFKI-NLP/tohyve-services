@@ -50,7 +50,6 @@ async def get(request: Request):
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     collected_messages = []
-    blank_req = 0
     try:
         while True:
             json_data = await websocket.receive_text()
