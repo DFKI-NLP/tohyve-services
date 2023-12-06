@@ -2,13 +2,21 @@ import gradio as gr
 import hyperlink
 import time
 import uvicorn
+import json
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 
 app = FastAPI()
 
 CUSTOM_PATH = "/asr"
+
+
+# Endpoint to serve the HTML file
+@app.post("/asr/web-stream")
+async def get(data: str):
+    return json.loads(data)
+
 
 
 # ASR Class
@@ -112,5 +120,5 @@ class ASR:
         global app 
         app = gr.mount_gradio_app(app, demo, path=CUSTOM_PATH)
         
-        uvicorn.run("transcribe:app", host="0.0.0.0", port=8001)
+        uvicorn.run("transcribe:app", host="0.0.0.0", port=8001, reload=True)
         return
