@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 RUN apt-get update
-RUN apt-get install -y python3-pip
+RUN apt-get install -y python3.8 python3-pip
 RUN apt-get install -y git
 RUN apt-get install -y ffmpeg
 
