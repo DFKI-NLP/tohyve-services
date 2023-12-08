@@ -6,12 +6,12 @@ EXPOSE 8001
 #set up environment
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
-ENV TRANSFORMERS_CACHE=/path/to/transformers
+ENV HF_HOME=/path/to/transformers
 ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 RUN apt-get update
-RUN apt-get install -y python3.8 python3-pip
+RUN apt-get install -y python3.10 python3-pip
 RUN apt-get install -y git
 RUN apt-get install -y ffmpeg
 
@@ -29,5 +29,6 @@ COPY models/ /app/models/
 ADD main.py /app
 ADD model.py /app
 ADD transcribe.py /app
+ADD web_stream.py /app
 
 CMD ["python3", "-m", "main"]

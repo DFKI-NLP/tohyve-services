@@ -5,5 +5,5 @@ jinja2==3.0.3
 git+https://github.com/huggingface/transformers
 torch
 sentencepiece
-gradio
+gradio==3.48.0
 hyperlink

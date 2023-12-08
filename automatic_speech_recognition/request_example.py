@@ -11,8 +11,8 @@ with open(audio_path, "rb") as f:
 
     headers = {"Content-Type": "application/json"}
     request_body = {
-        "fn_index":4,
-        # "fn_index":3,
+        # "fn_index":4,
+        "fn_index":3,
         "data": [
             "de", # this need to be change according to the audio language code 
             {
@@ -25,14 +25,4 @@ with open(audio_path, "rb") as f:
     response = requests.post(url, json=request_body, headers=headers)
 
     print(json.dumps(response.json(), indent=4))
-
-
-
-
-
-
-
-
-
-
 

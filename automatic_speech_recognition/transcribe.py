@@ -1,10 +1,11 @@
 import gradio as gr
 import hyperlink
-import time
 import uvicorn
-import json
+import socket
 
+from web_stream import start_stream
 from fastapi import FastAPI, Request
+from fastapi.responses import StreamingResponse
 
 
 app = FastAPI()
@@ -12,10 +13,13 @@ app = FastAPI()
 CUSTOM_PATH = "/asr"
 
 
-# Endpoint to serve the HTML file
-@app.post("/asr/web-stream")
-async def get(data: str):
-    return json.loads(data)
+# Endpoint to serve streaming
+@app.get("/asr/web-stream")
+async def stream_asr(url: str, source_language: str):
+    try:
+        return StreamingResponse(content=start_stream(url, source_language), media_type="application/json")
+    except socket.error as e:
+        print(f"Socket error: {e}")
 
 
 
@@ -120,5 +124,5 @@ class ASR:
         global app 
         app = gr.mount_gradio_app(app, demo, path=CUSTOM_PATH)
         
-        uvicorn.run("transcribe:app", host="0.0.0.0", port=8001, reload=True)
+        uvicorn.run("transcribe:app", host="0.0.0.0", port=8001)
         return
