@@ -5,24 +5,24 @@ ASR transcripes spoken audio into text form. The service works with MP3-encoded 
 ### To Pull it: 
 
 * Medium model (~16GB)
-```hs
-docker pull dfkitohyve/asr:gpu-cuda-12.2.0
+```bash
+docker pull dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0
 ```
 * Large model (~34GB)
-```hs
+```bash
 docker pull dfkitohyve/tohyveservices:asr-large-cuda-12.2.0
 ```
 
 ### To Run it: 
 
 CPU
-```hs
-docker run -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda-12.2.0
+```bash
+docker run -p 8001:8001/tcp dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0
 ```
 
 GPU
-```hs
-docker run --gpus '"device=0"' -p 8001:8001/tcp dfkitohyve/asr:gpu-cuda-12.2.0
+```bash
+docker run --gpus '"device=0"' -p 8001:8001/tcp dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0
 ```
 
 
@@ -48,7 +48,7 @@ setx PATH "<path of unzipped ffmpeg>;%PATH%"
 ``` 
 
 ### To start the API:
-```
+```bash
 python3 -m main
 ```
 ## The tool is available in:
@@ -121,6 +121,40 @@ N.B: Both **1.** and **2.** endpoints has the same request body and responses.
     "average_duration":average time to produce each result
 }
 ```
+
+**3. ASR Web Stream:**
+
+We extended the service with web streaming capabilities. In this end-point you can send a streaming URL with its streaming language and get the transcribed text for streaming data asynchronously.
+
+```hs
+GET /asr/web-stream
+```
+
+**Parameters**
+```
+url (string, required): A streaming URL.
+source_language (string, required): Language code of the streaming audio.
+```
+
+**Request Body (Input data format)**
+```hs
+{
+    "url": "your streaming url",
+    "source_language": "streaming language code"
+}
+```
+
+**Response**
+
+Response body is same as above. 
+
+**Request Script**
+
+To fetch streaming data and create a continious request we need a stremaing request. So we wrote a python script for that. Here you can find the [script]("https://github.com/DFKI-NLP/tohyve-services/blob/master/automatic_speech_recognition/stream_request_example.py"). 
+
+
+
+
 ## Error Handling
 * 400 Bad Request: Invalid request parameters.
 * 404 Not Found: Resource not found.
