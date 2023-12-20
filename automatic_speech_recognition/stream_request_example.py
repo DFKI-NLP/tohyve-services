@@ -29,5 +29,3 @@ if response.status_code == 200:
         print("No content received from the server.")
 else:
     print(f"Request failed with status code {response.status_code}")
-
-
