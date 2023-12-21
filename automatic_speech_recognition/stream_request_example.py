@@ -25,6 +25,8 @@ if response.status_code == 200:
                     responses_ls.append(response_str[1])
                 else:
                     responses_ls.append(response_str)
+            else:
+                break
     else:
         print("No content received from the server.")
 else:
