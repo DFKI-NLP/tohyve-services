@@ -133,7 +133,7 @@ To send a request for file uplaod we need a base64 encodings. So we wrote a pyth
       -d @curl.json \
       https://dfki-3109.dfki.de/asr/run/predict  
 ```
-Where [`curl.json`](./curl.json) is a JSON file, which contains input data.
+Where [`curl.json`](./curl.json) is a JSON file, which contains input data. Please check curl.json before using it. 
 
 
 **3. ASR Web Stream:**
