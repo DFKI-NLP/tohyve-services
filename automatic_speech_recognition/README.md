@@ -150,7 +150,7 @@ Response body is same as above.
 
 **Request Script**
 
-To fetch streaming data and create a continious request we need a stremaing request. So we wrote a python script for that. Here you can find the [script]("https://github.com/DFKI-NLP/tohyve-services/blob/master/automatic_speech_recognition/stream_request_example.py"). 
+To fetch streaming data and create a continious request we need a stremaing request. So we wrote a python script for that. Here you can find the [ `script`]("https://github.com/DFKI-NLP/tohyve-services/blob/master/automatic_speech_recognition/stream_request_example.py"). 
 
 
 
