@@ -113,7 +113,7 @@ N.B: Both **1.** and **2.** endpoints has the same request body and responses.
 ```
 
 **Response**
-```hs
+```bash
 {
     "data":["transcribe text"],
     "is_generating":boolean response,
@@ -127,7 +127,7 @@ N.B: Both **1.** and **2.** endpoints has the same request body and responses.
 To send a request for file uplaod we need a base64 encodings. So we wrote a python script for that. Here you can find the [`script`](./request_example.py).
 
 **Curl Call**
-```hs
+```bash
 	curl -X POST \
       -H "Content-Type:application/json" \
       -d @curl.json \
