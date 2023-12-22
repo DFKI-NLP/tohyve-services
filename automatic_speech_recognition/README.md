@@ -122,6 +122,11 @@ N.B: Both **1.** and **2.** endpoints has the same request body and responses.
 }
 ```
 
+**Request via Python Script**
+
+To send a request for file uplaod we need a base64 encodings. So we wrote a python script for that. Here you can find the [`script`](./request_example.py).
+
+
 **3. ASR Web Stream:**
 
 We extended the service with web streaming capabilities. In this end-point you can send a streaming URL with its streaming language and get the transcribed text for streaming data asynchronously.
@@ -165,5 +170,3 @@ curl -G "http://localhost:8001/asr/web-stream" \
 * 400 Bad Request: Invalid request parameters.
 * 404 Not Found: Resource not found.
 
-
-curl -G "http://localhost:8001/asr/web-stream" --data-urlencode "url=https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3?aggregator=web" --data-urlencode "source_language=de"
