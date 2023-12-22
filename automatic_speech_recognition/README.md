@@ -101,7 +101,7 @@ N.B: Both **1.** and **2.** endpoints has the same request body and responses.
 **Request Body (Input data format)**
 ```hs
 {
-    "fn_index":4, # always use 4, it's a fixed code from the Gradio 
+    "fn_index":3, # always use 4, it's a fixed code from the Gradio 
     "data": [
         "input_language", # this need to be change according to the audio language code 
         {
@@ -125,6 +125,15 @@ N.B: Both **1.** and **2.** endpoints has the same request body and responses.
 **Request via Python Script**
 
 To send a request for file uplaod we need a base64 encodings. So we wrote a python script for that. Here you can find the [`script`](./request_example.py).
+
+**Curl Call**
+```hs
+	curl -X POST \
+      -H "Content-Type:application/json" \
+      -d @curl.json \
+      https://dfki-3109.dfki.de/asr/run/predict  
+```
+Where [`curl.json`](./curl.json) is a JSON file, which contains input data.
 
 
 **3. ASR Web Stream:**
@@ -169,4 +178,3 @@ curl -G "http://localhost:8001/asr/web-stream" \
 ## Error Handling
 * 400 Bad Request: Invalid request parameters.
 * 404 Not Found: Resource not found.
-

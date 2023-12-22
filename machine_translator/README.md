@@ -130,6 +130,14 @@ N.B: Both **1.** and **2.** endpoints has the same request body and responses.
     "average_duration":average time to produce each result
 }
 ```
+**Curl Call**
+```hs
+	curl -X POST \
+      -H "Content-Type:application/json" \
+      -d @curl.json \
+      https://dfki-3109.dfki.de/tts/run/predict  
+```
+Where [`curl.json`](./curl.json) is a JSON file, which contains input data. Please check curl.json before using it. 
 
 ## Error Handling
 * 400 Bad Request: Invalid request parameters.
