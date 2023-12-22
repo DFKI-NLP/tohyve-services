@@ -13,7 +13,7 @@ The individual models encompass:
 
 ## Example Usage
 
-To use the stream capabilities of ASR and then integrate with other services we created a python script [`request_stream_demo.py`](./request_stream_demo.py).
+To use the stream capabilities of ASR and then integrate with other services we created a small python script [`request_stream_demo.py`](./request_stream_demo.py).
 
 To use it:
 ```
