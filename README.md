@@ -14,7 +14,7 @@ The individual models encompass:
 
 To use the stream capabilities of ASR and then integrate with other services we created a python script [`request_stream_demo.py`](./request_stream_demo.py).
 
-To run it:
+To use it:
 ```
 python -m request_stream_demo
 ```
