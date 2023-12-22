@@ -99,7 +99,7 @@ name (string, required): A name for the audio.
 N.B: Both **1.** and **2.** endpoints has the same request body and responses. 
 
 **Request Body (Input data format)**
-```hs
+```bash
 {
     "fn_index":3, # always use 4, it's a fixed code from the Gradio 
     "data": [
@@ -151,7 +151,7 @@ source_language (string, required): Language code of the streaming audio.
 ```
 
 **Request Body (Input data format)**
-```hs
+```bash
 {
     "url": "your streaming url",
     "source_language": "streaming language code"
