@@ -18,7 +18,7 @@ async def stream(stream_url: str, source_language: str, target_language: str):
         async for result in send_stream_req_pipe(stream_url, source_language, target_language):
             yield result
             await asyncio.sleep(0)
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
+    return StreamingResponse(content = event_stream(), media_type = "application/json")
 
         
 async def send_stream_req_pipe(stream_url, source_language, target_language):
@@ -90,11 +90,11 @@ async def send_stream_req_pipe(stream_url, source_language, target_language):
                                     "asr_response": asr_responses,
                                     "mt_response": mt_response,
                                     "tts_response": tts_verdict,
-                                    "tts_audio_encodings": tts_audio_encodings
+                                    # "tts_audio_encodings": tts_audio_encodings
                                 }
 
                                 asr_responses = ""
-                                yield json.dumps(result_dict)
+                                yield json.dumps(result_dict)+"\n"
                                 await asyncio.sleep(0)
                         else:
                             responses_ls.append(response_str)
@@ -149,7 +149,7 @@ class Pipe:
             
 
 
-# curl 'http://localhost:8009/full-stream?stream_url=https%3A%2F%2Fst01.sslstream.dlf.de%2Fdlf%2F01%2F128%2Fmp3%2Fstream.mp3%3Faggregator%3Dweb&source_language=de&target_language=en' \
+# curl 'http://localhost:8009/stream-pipe?stream_url=https%3A%2F%2Fst01.sslstream.dlf.de%2Fdlf%2F01%2F128%2Fmp3%2Fstream.mp3%3Faggregator%3Dweb&source_language=de&target_language=en' \
 # -H 'Accept-Language: en-GB,en-US;q=0.9,en;q=0.8,de;q=0.7,bn;q=0.6' \
 # -H 'Connection: keep-alive' \
 # -H 'Cookie: _ga=GA1.1.2037519331.1702913456; _ga_R1FN4KJKJH=GS1.1.1702932577.4.1.1702932828.0.0.0' \
