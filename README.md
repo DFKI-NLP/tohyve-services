@@ -18,4 +18,4 @@ To use it:
 ```
 python -m request_stream_demo
 ```
-N.B: Plase open the script and change the variable values with your actual values and to use TTS audio don't forget to uncomment `tts_audio_encodings`
+N.B: Plase open the script and change the variable values with your actual values and to use TTS audio don't forget to uncomment `tts_audio_encodings`(line 85). The TTS encodings are commented out for better visibility.
