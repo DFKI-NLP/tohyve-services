@@ -148,13 +148,22 @@ source_language (string, required): Language code of the streaming audio.
 
 Response body is same as above. 
 
-**Request Script**
+**Request via Python Script**
 
-To fetch streaming data and create a continious request we need a stremaing request. So we wrote a python script for that. Here you can find the [ `script`](./request_stream.py). 
+To fetch streaming data and create a continious request we need a stremaing request. So we wrote a python script for that. Here you can find the [`script`](./request_stream.py). 
 
+**Curl Call**
+```bash
+curl -G "http://localhost:8001/asr/web-stream" \
+    --data-urlencode "url=https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3?aggregator=web" \
+    --data-urlencode "source_language=de"
+```
 
 
 
 ## Error Handling
 * 400 Bad Request: Invalid request parameters.
 * 404 Not Found: Resource not found.
+
+
+curl -G "http://localhost:8001/asr/web-stream" --data-urlencode "url=https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3?aggregator=web" --data-urlencode "source_language=de"
