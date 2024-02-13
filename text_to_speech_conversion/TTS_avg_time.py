@@ -78,15 +78,10 @@ if language_code == "en":
     total_processing_time = 0
     for sentence in en_sentences:
         total_processing_time += send_sentence(sentence, language_code)
-
-
     average_time = total_processing_time/len(en_sentences)
 elif language_code == "de":
-
     for sentence in de_sentences:
         total_processing_time += send_sentence(sentence, language_code)
-
-
     average_time = total_processing_time/len(de_sentences)  
 
 print(f"Average processing time for a single sentence: {round(average_time,3)} seconds")
