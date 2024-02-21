@@ -246,4 +246,5 @@ English Sentences:
 "Ice cream is a popular dessert.",
 "Elephants are the largest land animals."
 ```
+![MicrosoftTeams-image](https://github.com/DFKI-NLP/tohyve-services/assets/26096858/8e472452-d850-40d3-ac48-9c650b33d5eb)
 
