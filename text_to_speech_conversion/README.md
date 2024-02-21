@@ -181,7 +181,7 @@ None
 
 **Response**
 
-Base64 encoded string of input text which later tranform into an audio.
+Base64 encoded a string of input text which later transformed into an audio.
 
 ## Error Handling
 * 400 Bad Request: Invalid request parameters.
@@ -193,9 +193,9 @@ Base64 encoded string of input text which later tranform into an audio.
 
 **English: ~ 0.047 secs**
 
-N.B: These number depends of sentence length.
+N.B: These number depends on sentence length.
 
-We calculate average from 20 german sentences and 20 english sentences.
+We calculate the average from 20 German sentences and 20 English sentences.
 
 German Sentences:
 
