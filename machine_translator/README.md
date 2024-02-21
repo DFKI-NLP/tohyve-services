@@ -153,7 +153,7 @@ N.B: These number depends of sentence length.
 
 We calculate average from 20 german sentences and 20 english sentences.
 
-Convert these german sentences to english:
+Convert these german sentences to english: ( ~ 0.37 secs )
 
 ```
 "Die Sonne geht im Osten auf und malt ein goldenes Bild auf den Himmel.",
@@ -178,7 +178,7 @@ Convert these german sentences to english:
 "Elefanten sind die größten Landtiere und sind bekannt für ihre Intelligenz und ihr soziales Verhalten."
 ```
 
-Convert these english sentences to german:
+Convert these english sentences to german: (~ 0.233 secs)
 
 ```
 "The sun rises in the east.",
