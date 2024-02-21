@@ -149,11 +149,11 @@ Where [`curl.json`](./curl.json) is a JSON file, which contains input data. Plea
 
 **English to German: ~ 0.233 secs**
 
-N.B: These number depends of sentence length.
+N.B: These number depends on sentence length.
 
-We calculate average from 20 german sentences and 20 english sentences.
+We calculate the average from 20 German sentences and 20 English sentences.
 
-Convert these german sentences to english: ( ~ 0.37 secs )
+Convert these German sentences to English:
 
 ```
 "Die Sonne geht im Osten auf und malt ein goldenes Bild auf den Himmel.",
@@ -178,7 +178,7 @@ Convert these german sentences to english: ( ~ 0.37 secs )
 "Elefanten sind die größten Landtiere und sind bekannt für ihre Intelligenz und ihr soziales Verhalten."
 ```
 
-Convert these english sentences to german: (~ 0.233 secs)
+Convert these english sentences to german: 
 
 ```
 "The sun rises in the east.",
