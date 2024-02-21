@@ -178,3 +178,18 @@ curl -G "http://localhost:8001/asr/web-stream" \
 ## Error Handling
 * 400 Bad Request: Invalid request parameters.
 * 404 Not Found: Resource not found.
+
+
+## Average Response time for ASR:
+German: ~ 12.401 secs
+
+We calculate average from 6 german audios. Where each audio has length:
+
+1. 7 secs
+2. 13 secs
+3. 10 secs 
+4. 2 secs
+5. 6 secs
+6. 16 secs 
+
+To check all the audio, check at `automatic_speech_recognition/asr_sounds_de`
