@@ -202,3 +202,4 @@ Convert these english sentences to german:
 "Ice cream is a popular dessert.",
 "Elephants are the largest land animals."
 ```
+![Screenshot 2024-02-21 182922](https://github.com/DFKI-NLP/tohyve-services/assets/26096858/8c8eb722-41e6-45af-9bd3-0d31dfab8bb7)
