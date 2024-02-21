@@ -193,3 +193,5 @@ We calculate average from 6 german audios. Where each audio has length:
 6. 16 secs 
 
 To check all the audio, check at `automatic_speech_recognition/asr_sounds_de`
+
+![avg_audio_file_time](https://github.com/DFKI-NLP/tohyve-services/assets/26096858/ed0a96a8-40c6-48b2-934d-8858ccc00b98)
