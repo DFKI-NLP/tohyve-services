@@ -144,3 +144,61 @@ Where [`curl.json`](./curl.json) is a JSON file, which contains input data. Plea
 * 404 Not Found: Resource not found.
 
 
+## Average Response time for MT:
+German to English: ~ 0.37 secs
+
+English to German: ~ 0.233 secs 
+
+N.B: These number depends of sentence length.
+
+We calculate average from 20 german sentences and 20 english sentences.
+
+Convert these german sentences to english:
+
+```
+"Die Sonne geht im Osten auf und malt ein goldenes Bild auf den Himmel.",
+"Äpfel sind eine Art von Obst, die in vielen verschiedenen Farben und Geschmacksrichtungen erhältlich sind.",
+"Hunde sind als bester Freund des Menschen bekannt und begleiten uns in vielen Lebenslagen.",
+"Lesen ist eine gute Gewohnheit, die das Wissen erweitert und die Fantasie anregt.",
+"Der Eiffelturm in Paris ist ein beeindruckendes Wahrzeichen und bietet einen atemberaubenden Blick auf die Stadt.",
+"Wasser kocht bei 100 Grad Celsius und verwandelt sich in Dampf, der in die Atmosphäre aufsteigt.",
+"Die Erde dreht sich um die Sonne und schafft so die Bedingungen für Leben, wie wir es kennen.",
+"Vögel haben die Fähigkeit zu fliegen, was ihnen eine einzigartige Perspektive auf die Welt bietet.",
+"Fische leben im Wasser und haben eine Vielzahl von Anpassungen entwickelt, um in verschiedenen Umgebungen zu überleben.",
+"Rosen sind oft rot und werden traditionell als Symbol der Liebe und Romantik angesehen.",
+"Der Himmel erscheint an einem klaren Tag blau, ein Phänomen, das durch die Streuung des Lichts in der Atmosphäre verursacht wird.",
+"Bäume produzieren Sauerstoff, ein lebenswichtiges Gas, das alle Tiere zum Atmen benötigen.",
+"Das Klavier ist ein musikalisches Instrument, das eine breite Palette von Tönen erzeugen kann und in vielen Musikgenres verwendet wird.",
+"Autos sind ein Verkehrsmittel, das es uns ermöglicht, schnell und bequem von einem Ort zum anderen zu gelangen.",
+"Regenbogen erscheinen nach dem Regen und sind ein schönes Naturphänomen, das oft Freude und Staunen hervorruft.",
+"Schmetterlinge beginnen als Raupen und durchlaufen eine bemerkenswerte Verwandlung in ihrem Lebenszyklus.",
+"Der Mond umkreist die Erde und beeinflusst viele Aspekte unseres Planeten, einschließlich der Gezeiten.",
+"Fußball ist weltweit ein beliebter Sport und bringt Menschen aus allen Lebensbereichen zusammen.",
+"Eiscreme ist ein beliebtes Dessert, das in einer Vielzahl von Geschmacksrichtungen erhältlich ist.",
+"Elefanten sind die größten Landtiere und sind bekannt für ihre Intelligenz und ihr soziales Verhalten."
+```
+
+Convert these english sentences to german:
+
+```
+"The sun rises in the east.",
+"Apples are a type of fruit.",
+"Dogs are known as man's best friend.",
+"Reading is a good habit.",
+"The Eiffel Tower is in Paris.",
+"Water boils at 100 degrees Celsius.",
+"The Earth revolves around the Sun.",
+"Birds have the ability to fly.",
+"Fish live in water.",
+"Roses are often red.",
+"The sky appears blue during a clear day.",
+"Trees produce oxygen.",
+"The piano is a musical instrument.",
+"Cars are a mode of transportation.",
+"Rainbows appear after rain.",
+"Butterflies start as caterpillars.",
+"The moon orbits the Earth.",
+"Soccer is a popular sport worldwide.",
+"Ice cream is a popular dessert.",
+"Elephants are the largest land animals."
+```
