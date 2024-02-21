@@ -145,9 +145,9 @@ Where [`curl.json`](./curl.json) is a JSON file, which contains input data. Plea
 
 
 ## Average Response time for MT:
-German to English: ~ 0.37 secs
+**German to English: ~ 0.37 secs**
 
-English to German: ~ 0.233 secs 
+**English to German: ~ 0.233 secs**
 
 N.B: These number depends of sentence length.
 

@@ -181,7 +181,7 @@ curl -G "http://localhost:8001/asr/web-stream" \
 
 
 ## Average Response time for ASR:
-German: ~ 12.401 secs
+**German: ~ 12.401 secs**
 
 We calculate average from 6 german audios. Where each audio has length:
 

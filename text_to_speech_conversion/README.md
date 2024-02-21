@@ -189,9 +189,9 @@ Base64 encoded string of input text which later tranform into an audio.
 
 
 ## Average Response time for TTS:
-German: ~ 0.17 secs
+**German: ~ 0.17 secs**
 
-English: ~ 0.047 secs 
+**English: ~ 0.047 secs**
 
 N.B: These number depends of sentence length.
 
