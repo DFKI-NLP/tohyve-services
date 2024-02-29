@@ -1,0 +1,98 @@
++-------------------------------------+--------------------------------------------+
+|               Package               |                  License                   |
++-------------------------------------+--------------------------------------------+
+|              -ip 23.2.1             |                    MIT                     |
+|           aiofiles 23.2.1           |                 Apache-2.0                 |
+|             altair 5.2.0            |            (Licence not found)             |
+|        annotated-types 0.6.0        |            (Licence not found)             |
+|             anyio 3.7.1             |                    MIT                     |
+|            asgiref 3.7.2            |                BSD-3-Clause                |
+|             attrs 23.1.0            |            (Licence not found)             |
+|            blinker 1.6.2            |                MIT License                 |
+|          certifi 2023.7.22          |                  MPL-2.0                   |
+|             cffi 1.16.0             |                    MIT                     |
+|       charset-normalizer 3.2.0      |                    MIT                     |
+|             click 8.1.7             |                BSD-3-Clause                |
+|            colorama 0.4.6           |            (Licence not found)             |
+|           contourpy 1.2.0           |            BSD 3-Clause License            |
+|            cycler 0.12.1            |   Copyright (c) 2015, matplotlib project   |
+|            distlib 0.3.7            |                  PSF-2.0                   |
+|            fastapi 0.68.2           |            (Licence not found)             |
+|             ffmpy 0.3.1             |                    MIT                     |
+|           filelock 3.12.4           |            (Licence not found)             |
+|             flask 3.0.0             |            (Licence not found)             |
+|           fonttools 4.46.0          |                    MIT                     |
+|           fsspec 2023.12.1          |                    BSD                     |
+|            gradio 3.50.2            |            (Licence not found)             |
+|         gradio-client 0.6.1         |            (Licence not found)             |
+|              h11 0.14.0             |                    MIT                     |
+|            httpcore 1.0.2           |            (Licence not found)             |
+|             httpx 0.25.2            |            (Licence not found)             |
+|        huggingface-hub 0.19.4       |                   Apache                   |
+|           hyperlink 21.0.0          |                    MIT                     |
+|               idna 3.4              |            (Licence not found)             |
+|      importlib-resources 6.1.1      |            (Licence not found)             |
+|          itsdangerous 2.1.2         |                BSD-3-Clause                |
+|             Jinja2 3.0.3            |                BSD-3-Clause                |
+|          jsonschema 4.20.0          |                    MIT                     |
+| jsonschema-specifications 2023.11.2 |                    MIT                     |
+|           kiwisolver 1.4.5          |         =========================          |
+|         markdown-it-py 3.0.0        |            (Licence not found)             |
+|           MarkupSafe 2.1.3          |                BSD-3-Clause                |
+|           matplotlib 3.8.2          |                    PSF                     |
+|             mdurl 0.1.2             |            (Licence not found)             |
+|             mpmath 1.3.0            |                    BSD                     |
+|            networkx 3.2.1           |            (Licence not found)             |
+|             numpy 1.26.2            | Copyright (c) 2005-2023, NumPy Developers. |
+|            orjson 3.9.10            |             Apache-2.0 OR MIT              |
+|            packaging 23.2           |            (Licence not found)             |
+|             pandas 2.1.3            |            BSD 3-Clause License            |
+|            Pillow 10.1.0            |                    HPND                    |
+|               pip 23.3              |                    MIT                     |
+|           pipenv 2023.10.3          |           The MIT License (MIT)            |
+|              plac 1.4.3             |                BSD License                 |
+|         platformdirs 3.11.0         |            (Licence not found)             |
+|          prettytable 3.10.0         |               BSD (3 clause)               |
+|            PyAudio 0.2.13           |                    MIT                     |
+|            pycparser 2.21           |                    BSD                     |
+|           pydantic 1.10.13          |                    MIT                     |
+|         pydantic-core 2.14.5        |                    MIT                     |
+|             pydub 0.25.1            |                    MIT                     |
+|           pygments 2.17.2           |                BSD-2-Clause                |
+|           pyparsing 3.1.1           |            (Licence not found)             |
+|        python-dateutil 2.8.2        |                Dual License                |
+|        python-multipart 0.0.6       |            (Licence not found)             |
+|          pytz 2023.3.post1          |                    MIT                     |
+|             PyYAML 6.0.1            |                    MIT                     |
+|          referencing 0.31.1         |                    MIT                     |
+|           regex 2023.10.3           |          Apache Software License           |
+|           requests 2.31.0           |                 Apache 2.0                 |
+|             rich 13.7.0             |                    MIT                     |
+|            rpds-py 0.13.2           |                    MIT                     |
+|          safetensors 0.4.1          |            (Licence not found)             |
+|       semantic-version 2.10.0       |                    BSD                     |
+|         sentencepiece 0.1.99        |                   Apache                   |
+|          setuptools 68.2.2          |            (Licence not found)             |
+|          shellingham 1.5.4          |                ISC License                 |
+|              six 1.16.0             |                    MIT                     |
+|            sniffio 1.3.0            |             MIT OR Apache-2.0              |
+|           soundfile 0.12.1          |            BSD 3-Clause License            |
+|           starlette 0.14.2          |                    BSD                     |
+|              sympy 1.12             |                    BSD                     |
+|          tokenizers 0.15.0          |            (Licence not found)             |
+|            tomlkit 0.12.0           |                    MIT                     |
+|             toolz 0.12.0            |                    BSD                     |
+|             torch 2.1.1             |                   BSD-3                    |
+|             tqdm 4.66.1             |              MPL-2.0 AND MIT               |
+|       transformers 4.36.0.dev0      |             Apache 2.0 License             |
+|             typer 0.9.0             |            (Licence not found)             |
+|       typing-extensions 4.8.0       |            (Licence not found)             |
+|            tzdata 2023.3            |                 Apache-2.0                 |
+|            urllib3 2.0.5            |            (Licence not found)             |
+|            uvicorn 0.15.0           |                    BSD                     |
+|          virtualenv 20.24.5         |            (Licence not found)             |
+|            wasabi 0.10.1            |                    MIT                     |
+|            wcwidth 0.2.13           |                    MIT                     |
+|          websockets 11.0.3          |                BSD-3-Clause                |
+|            werkzeug 3.0.0           |            (Licence not found)             |
++-------------------------------------+--------------------------------------------+
