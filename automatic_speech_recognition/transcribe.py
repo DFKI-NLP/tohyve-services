@@ -3,8 +3,8 @@ import hyperlink
 import uvicorn
 import socket
 
-from web_stream import start_stream
-from fastapi import FastAPI, Request
+from web_stream import start_stream, stream_tcp_audio 
+from fastapi import FastAPI, Request, WebSocket
 from fastapi.responses import StreamingResponse
 
 
@@ -17,7 +17,13 @@ CUSTOM_PATH = "/asr"
 @app.get("/asr/web-stream")
 async def stream_asr(url: str, source_language: str):
     try:
-        return StreamingResponse(content=start_stream(url, source_language), media_type="application/json")
+        if "tcp" in url:
+            # async for asr_response in stream_tcp_audio(url, source_language):
+            #     yield asr_response
+            return StreamingResponse(stream_tcp_audio(url, source_language), media_type = "application/json")
+            # return StreamingResponse(content = stream_tcp_audio(url, source_language), media_type = "application/json")
+        else:
+            return StreamingResponse(content = start_stream(url, source_language), media_type = "application/json")
     except socket.error as e:
         print(f"Socket error: {e}")
 
