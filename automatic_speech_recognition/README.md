@@ -6,7 +6,7 @@ ASR transcripes spoken audio into text form. The service works with MP3-encoded 
 
 * Medium model (~16GB)
 ```bash
-docker pull dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0
+docker pull dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0-v2 
 ```
 * Large model (~34GB)
 ```bash
@@ -17,12 +17,12 @@ docker pull dfkitohyve/tohyveservices:asr-large-cuda-12.2.0
 
 CPU
 ```bash
-docker run -p 8001:8001/tcp dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0
+docker run -p 8001:8001/tcp dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0-v2 
 ```
 
 GPU
 ```bash
-docker run --gpus '"device=0"' -p 8001:8001/tcp dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0
+docker run --gpus '"device=0"' -p 8001:8001/tcp dfkitohyve/tohyveservices:stream-asr-medium-cuda-12.2.0-v2 
 ```
 
 

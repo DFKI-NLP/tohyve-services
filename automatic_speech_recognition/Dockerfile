@@ -2,6 +2,7 @@ FROM nvidia/cuda:12.2.0-base-ubuntu20.04
 # FROM nvidia/cuda:11.6.2-base-ubuntu20.04
 
 EXPOSE 8001
+EXPOSE 12345
 
 #set up environment
 ENV LANG C.UTF-8
