@@ -5,18 +5,18 @@ Generates speech for an input text. For speech transformation it uses the Nvidia
 ### To Pull it: 
 * Container Size (~7GB)
 ```hs
-docker pull dfkitohyve/tts:gpu-cuda-12.2.0
+docker pull dfkitohyve/tts:cuda-12.2.0
 ```
 ### To Run it: 
 
 CPU
 ```hs
-docker run -p 8003:8003/tcp dfkitohyve/tts:gpu-cuda-12.2.0
+docker run -p 8003:8003/tcp dfkitohyve/tts:cuda-12.2.0
 ```
 
 GPU
 ```hs
-docker run --gpus '"device=0"' -p 8003:8003/tcp dfkitohyve/tts:gpu-cuda-12.2.0
+docker run --gpus '"device=0"' -p 8003:8003/tcp dfkitohyve/tts:cuda-12.2.0
 ```
 
 
