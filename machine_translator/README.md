@@ -4,19 +4,19 @@ Translate a text from a specific language to another language using machine tran
 ### To Pull it: 
 * Container Size (~9GB)
 ```hs
-docker pull dfkitohyve/mt:gpu-cuda-12.2.0
+docker pull dfkitohyve/mt:cuda-12.2.0
 ```
 
 ### To Run it: 
 
 CPU
 ```hs
-docker run -p 8002:8002/tcp dfkitohyve/mt:gpu-cuda-12.2.0
+docker run -p 8002:8002/tcp dfkitohyve/mt:cuda-12.2.0
 ```
 
 GPU
 ```hs
-docker run --gpus '"device=0"' -p 8002:8002/tcp dfkitohyve/mt:gpu-cuda-12.2.0
+docker run --gpus '"device=0"' -p 8002:8002/tcp dfkitohyve/mt:cuda-12.2.0
 
 ```
 
