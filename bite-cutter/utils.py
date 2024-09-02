@@ -131,6 +131,7 @@ class WavHandler():
             # Check if file already exists
             if os.path.exists(wav):
                 big_wav += AudioSegment.from_wav(wav)
+                big_wav += self._create_break()
             else:
                 raise FileNotFoundError
 
@@ -139,6 +140,15 @@ class WavHandler():
 
         # Clean up wav snippets
         self._delete_wav()
+
+    def _create_break(self):
+        """Create a 0.4s long silence to insert between snippets."""
+
+        # create a silence of 0.4 seconds
+        break_duration = 400
+        silence = AudioSegment.silent(duration=break_duration)
+
+        return silence
 
     def _delete_wav(self):
         """Deletes temporary wav bites."""
