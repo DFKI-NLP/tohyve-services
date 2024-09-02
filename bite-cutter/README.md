@@ -28,7 +28,7 @@ The file predict.txt is a text file, that will contain the path of the audio fil
 2. Download the created audio file, using the path from the predict.txt file
 ```bash
 curl -o /tmp/output.wav \
-http://localhost:8006/app/$FILEPATH
+http://localhost:8006/$FILEPATH
 ```
 
 ## To interact with the tool remotely:
