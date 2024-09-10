@@ -7,8 +7,9 @@ import json
 import requests
 import traceback
 import sys
-import pyaudio
+#import pyaudio
 import wave
+import ast
 
 app = Flask(__name__)
 
@@ -46,6 +47,11 @@ async def audio_socket(websocket, path):
             asr_url = "https://dfki-3109.dfki.de/asr/run/predict"
             mt_url = "https://dfki-3109.dfki.de/mt/run/predict"
             tts_url = "https://dfki-3109.dfki.de/tts/run/predict"
+
+            asr_url = "http://localhost:8001/asr/run/predict"
+            mt_url = "http://localhost:8002/mt/run/predict"
+            tts_url = "http://localhost:8003/tts/run/predict"
+            
             
             try:
                 asr_response = requests.post(asr_url, json=json_data, headers=headers)
@@ -85,7 +91,10 @@ async def audio_socket(websocket, path):
             #     "status": "success",
             #     "message": "Audio data received and processed."
             # }
-            await websocket.send(str(asr_response.json()))
+            tmpVar = asr_response.json()
+            myObject = {"asr" : tmpVar["data"][0]}
+            myObject["mt"] = mt_response_text 
+            await websocket.send(json.dumps(myObject))
     except websockets.exceptions.ConnectionClosedOK:
         clients.remove(websocket)
 
@@ -105,5 +114,5 @@ def index():
 if __name__ == '__main__':
     socket_thread = threading.Thread(target=start_websocket_server)
     socket_thread.start()
-    app.run(debug=True, host="0.0.0.0", port=8001)
+    app.run(debug=True, host="0.0.0.0", port=8010)
 
