@@ -28,6 +28,9 @@ ProxyPass "/ws" "ws://localhost:8005/ws"
 ProxyPassReverse "/ws" "ws://localhost:8005/ws"
 ```
 
+### Local system
+On a local environment you have to start the ws-server in app.py
+
 ### Endpoints
 In [main.py](https://github.com/DFKI-NLP/tohyve-services/blob/master/tohyve_demo/main.py), their are two endpoints written for this demo. One is ***/ws*** and another one is ***/tohyve-demo***.
 
